@@ -16,8 +16,8 @@ export default class Audio {
 
     static sources = []
 
-    static samplemap = {
-    }
+    static samples = {}
+    static samplemap = {}
 
     static fetching = 0;
     static fetchSample(name, url) {
@@ -25,12 +25,15 @@ export default class Audio {
         fetch(url)
         .then(response => response.arrayBuffer())
         .then(data => Audio.context.decodeAudioData(data))
-        .then(sample => { Audio.samplemap[name] = sample; Audio.fetching--; });
+        .then(sample => { Audio.samples[name] = sample; Audio.fetching--; });
     }
 
-    static play(name) {
+    static play(name, note) {
+        if (note !== undefined)
+            name = `${name}${Audio.samplemap.notes[note - 1]}`;
+
         var source = Audio.context.createBufferSource();
-        source.buffer = Audio.samplemap['test'];
+        source.buffer = Audio.samples[name];
         var index = Audio.sources.length;
         source.onended = () => Audio.sources.splice(index, 1);
         Audio.sources.push(source);
@@ -48,9 +51,21 @@ export default class Audio {
         Audio.log('[init] Creating AudioContext');
         Audio.context = new AudioContext();
 
-        Audio.log('[init] Filling samplemap');
-        Audio.fetchSample('test', 'assets/samples/test.wav');
-        // TODO: Fill samplemap.
+        Audio.log('[init] Filling samples');
+        // Audio.fetchSample('test', 'assets/samples/test.wav');
+        fetch('assets/samplemap.json').then(response => response.json())
+        .then(map => {
+            Audio.samplemap = map;
+            map.instruments.forEach(instr => {
+                map.notes.forEach(note => {
+                    var full = `${instr}${note}`;
+                    Audio.fetchSample(full, `assets/samples/${full}.ogg`);
+                });
+            });
+            map.samples.forEach(full => {
+                Audio.fetchSample(full, `assets/samples/${full}.ogg`);
+            });
+        });
 
         Audio.log('[init] Starting update loop');
         window.requestAnimationFrame(Audio.update);
@@ -70,12 +85,12 @@ export default class Audio {
         Audio.time = rtime * 0.001;
 
         if (Audio.fetching) {
-            // Wait until samplemap fetched completely.
+            // Wait until samples fetched completely.
             Audio.log(`[init] Fetching: ${Audio.fetching}`);
             return;
         }
         if (!Audio.initFinished) {
-            // Second half of initialization, with the samplemap intact, starts here.
+            // Second half of initialization, with the samples intact, starts here.
             Audio.log('[init] Fetching finished, resuming init');
             Audio.initFetched();
         }
@@ -87,6 +102,15 @@ export default class Audio {
 
         // TODO: Any audio management (f.e. custom loops) should end up here.
         if (b % 0.5 == 0)
-            Audio.play('test');
+            Audio.play('bass', 1);
+
+        if (b % 1 == 0)
+            Audio.play('bass', 3);
+
+        if (b % 2 == 0)
+            Audio.play('piano', 5);
+
+        if (b % 4 == 1)
+            Audio.play('piano', 4);
     }
 }
