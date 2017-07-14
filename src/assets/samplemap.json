@@ -7,10 +7,13 @@
         "05-ais"
     ],
     "instruments": [
-        "bass",
-        "piano"
+        "acoustic-kit/bass",
+        "acoustic-kit/piano",
+        "8-bit/8-bit-bass",
+        "8-bit/8-bit-lead"
     ],
     "samples": [
-        
+        "8-bit/8-bit-kick",
+        "8-bit/8-bit-snare"
     ]
 }

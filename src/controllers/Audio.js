@@ -20,12 +20,17 @@ export default class Audio {
     static samplemap = {}
 
     static fetching = 0;
-    static fetchSample(name, url) {
+    static fetchSample(url) {
         Audio.fetching++;
         fetch(url)
         .then(response => response.arrayBuffer())
         .then(data => Audio.context.decodeAudioData(data))
-        .then(sample => { Audio.samples[name] = sample; Audio.fetching--; });
+        .then(sample => {
+            for (var i = 0; i < arguments.length; i++)
+                Audio.samples[arguments[i]] = sample;
+            Audio.fetching--;
+            return sample;
+        });
     }
 
     static play(name, note) {
@@ -60,11 +65,12 @@ export default class Audio {
             map.instruments.forEach(instr => {
                 map.notes.forEach(note => {
                     var full = `${instr}${note}`;
-                    Audio.fetchSample(full, `assets/samples/${full}.ogg`);
+                    var short = full.split('/');
+                    Audio.fetchSample(`assets/samples/${full}.ogg`, full, short[short.length - 1]);
                 });
             });
             map.samples.forEach(full => {
-                Audio.fetchSample(full, `assets/samples/${full}.ogg`);
+                Audio.fetchSample(`assets/samples/${full}.ogg`, full);
             });
             Audio.fetching--;
         });
@@ -81,6 +87,7 @@ export default class Audio {
 
     }
 
+    static lastFetching = -1;
     static update(rtime) {
         window.requestAnimationFrame(Audio.update);
 
@@ -88,7 +95,9 @@ export default class Audio {
 
         if (Audio.fetching) {
             // Wait until samples fetched completely.
-            Audio.log(`[init] Fetching: ${Audio.fetching}`);
+            if (Audio.fetching != Audio.lastFetching)
+                Audio.log(`[init] Fetching: ${Audio.fetching}`);
+            Audio.lastFetching = Audio.fetching;
             return;
         }
         if (!Audio.initFinished) {
@@ -99,7 +108,7 @@ export default class Audio {
 
         var b = Audio.b;
         if (b <= 0)
-            // Not on beat.
+            // Not "on beat."
             return;
 
         // TODO: Any audio management (f.e. custom loops) should end up here.
