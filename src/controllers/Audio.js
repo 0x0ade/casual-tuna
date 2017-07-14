@@ -33,16 +33,26 @@ export default class Audio {
         });
     }
 
-    static play(name, note) {
-        if (note !== undefined)
+    static play(name, note, data) {
+        data = data || {};
+        data.volume = data.volume || 1;
+
+        if (note != null)
             name = `${name}${Audio.samplemap.notes[note - 1]}`;
+
+        // TODO: Ring buffer - reuse nodes!
 
         var source = Audio.context.createBufferSource();
         source.buffer = Audio.samples[name];
         var index = Audio.sources.length;
         source.onended = () => Audio.sources.splice(index, 1);
-        Audio.sources.push(source);
-        source.connect(Audio.context.destination);
+
+        var gain = Audio.context.createGain();
+        gain.gain.value = data.volume;
+        source.connect(gain);
+        gain.connect(Audio.context.destination);
+
+        Audio.sources.push({source: source, gain: gain});        
         source.start();
     }
 
@@ -70,7 +80,8 @@ export default class Audio {
                 });
             });
             map.samples.forEach(full => {
-                Audio.fetchSample(`assets/samples/${full}.ogg`, full);
+                var short = full.split('/');
+                Audio.fetchSample(`assets/samples/${full}.ogg`, full, short[short.length - 1]);
             });
             Audio.fetching--;
         });
@@ -112,16 +123,21 @@ export default class Audio {
             return;
 
         // TODO: Any audio management (f.e. custom loops) should end up here.
-        if (b % 0.5 == 0)
-            Audio.play('bass', 1);
+        if (b % 0.5 == 0 && b % 2 != 0) {
+            Audio.play('8-bit-kick', null, {volume: 1.0});
+            Audio.play('8-bit-bass', 1, {volume: 1.0});
+        }
 
-        if (b % 1 == 0)
-            Audio.play('bass', 3);
+        if (b % 1 == 0) {
+            Audio.play('8-bit-snare', null, {volume: 1.0});
+        }
 
-        if (b % 2 == 0)
-            Audio.play('piano', 5);
+        if (b % 2 == 0) {
+            Audio.play('8-bit-lead', 5, {volume: 0.7});
+            Audio.play('8-bit-bass', 2, {volume: 1.0});
+        }
 
         if (b % 4 == 1)
-            Audio.play('piano', 4);
+            Audio.play('8-bit-lead', 4, {volume: 0.6});
     }
 }
