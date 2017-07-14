@@ -53,6 +53,7 @@ export default class Audio {
 
         Audio.log('[init] Filling samples');
         // Audio.fetchSample('test', 'assets/samples/test.wav');
+        Audio.fetching++;
         fetch('assets/samplemap.json').then(response => response.json())
         .then(map => {
             Audio.samplemap = map;
@@ -65,6 +66,7 @@ export default class Audio {
             map.samples.forEach(full => {
                 Audio.fetchSample(full, `assets/samples/${full}.ogg`);
             });
+            Audio.fetching--;
         });
 
         Audio.log('[init] Starting update loop');
