@@ -119,8 +119,11 @@ export default class Audio {
         return info;
     }
 
-    static inited = false;
-    static initFinished = false;
+    static inited = false
+    static initFinished = false
+    static _initPromise = null
+    static _initResolve = null
+    static _initReject = null
     static init() {
         if (window.CTAudio != Audio && window.CTAudio !== undefined) {
             // Old instance still hanging around somewhere - kill it with fire!
@@ -132,79 +135,90 @@ export default class Audio {
         }
         window.CTAudio = Audio;
         if (Audio.inited)
-            return;
+            return Audio._initPromise;
         Audio.inited = true;
 
-        Audio.log('[init] Creating AudioContext');
-        Audio.context = new AudioContext();
+        return Audio._initPromise = new Promise((resolve, reject) => {
+            Audio._initResolve = resolve;
+            Audio._initReject = reject;
 
-        Audio.masterGain = Audio.context.createGain();
-        Audio.masterGain.connect(Audio.context.destination);
+            Audio.log('[init] Creating AudioContext');
+            Audio.context = new AudioContext();
 
-        Audio.masterFilter = Audio.context.createBiquadFilter();
-        Audio.masterFilter.frequency.value = Audio.context.sampleRate * 0.5;
-        Audio.masterFilter.connect(Audio.masterGain);
+            Audio.masterGain = Audio.context.createGain();
+            Audio.masterGain.connect(Audio.context.destination);
 
-        Audio.masterConvolverBypass = Audio.context.createGain();
-        Audio.masterConvolverBypass.connect(Audio.masterFilter);
-        
-        Audio.masterConvolver = Audio.context.createConvolver();
-        Audio.masterConvolver.connect(Audio.masterConvolverBypass);
+            Audio.masterFilter = Audio.context.createBiquadFilter();
+            Audio.masterFilter.frequency.value = Audio.context.sampleRate * 0.5;
+            Audio.masterFilter.connect(Audio.masterGain);
 
-        Audio.masterConvolverGain = Audio.context.createGain();
-        Audio.masterConvolverGain.connect(Audio.masterConvolver);
+            Audio.masterConvolverBypass = Audio.context.createGain();
+            Audio.masterConvolverBypass.connect(Audio.masterFilter);
+            
+            Audio.masterConvolver = Audio.context.createConvolver();
+            Audio.masterConvolver.connect(Audio.masterConvolverBypass);
 
-        Audio.masterConvolverGain.gain.value = 0.5;
-        Audio.masterConvolverBypass.gain.value = 0.9;
+            Audio.masterConvolverGain = Audio.context.createGain();
+            Audio.masterConvolverGain.connect(Audio.masterConvolver);
 
-        // What other nodes should see as "master output".
-        Audio.master = Audio.context.createGain();
-        Audio.master.connect(Audio.masterConvolverGain);
-        Audio.master.connect(Audio.masterConvolverBypass);
-        
-        Audio.log('[init] Filling samples and irs');
-        Audio.fetching++;
-        // TODO: Replace fetch json with require
-        fetch('assets/samplemap.json').then(response => response.json())
-        .then(map => {
-            Audio.samplemap = map;
-            map.instruments.forEach(instr => {
-                map.notes.forEach(note => {
-                    let full = `${instr}${note}`;
+            Audio.masterConvolverGain.gain.value = 0.5;
+            Audio.masterConvolverBypass.gain.value = 0.9;
+
+            // What other nodes should see as "master output".
+            Audio.master = Audio.context.createGain();
+            Audio.master.connect(Audio.masterConvolverGain);
+            Audio.master.connect(Audio.masterConvolverBypass);
+            
+            Audio.log('[init] Filling samples and irs');
+            Audio.fetching++;
+            // TODO: Replace fetch json with require
+            fetch('assets/samplemap.json').then(response => response.json())
+            .then(map => {
+                Audio.samplemap = map;
+                map.instruments.forEach(instr => {
+                    map.notes.forEach(note => {
+                        let full = `${instr}${note}`;
+                        let short = full.split('/');
+                        Audio.fetchSample(`assets/samples/${full}.ogg`, full, short[short.length - 1]);
+                    });
+                });
+                map.samples.forEach(full => {
                     let short = full.split('/');
                     Audio.fetchSample(`assets/samples/${full}.ogg`, full, short[short.length - 1]);
                 });
+                Audio.fetching--;
             });
-            map.samples.forEach(full => {
-                let short = full.split('/');
-                Audio.fetchSample(`assets/samples/${full}.ogg`, full, short[short.length - 1]);
-            });
-            Audio.fetching--;
-        });
 
-        Audio.fetching++;
-        // TODO: Replace fetch json with require
-        fetch('assets/irmap.json').then(response => response.json())
-        .then(map => {
-            Audio.irmap = map;
-            map.forEach(full => {
-                let short = full.split('/');
-                Audio.fetchSample(`assets/irs/${full}.wav`, full, short[short.length - 1]);
+            Audio.fetching++;
+            // TODO: Replace fetch json with require
+            fetch('assets/irmap.json').then(response => response.json())
+            .then(map => {
+                Audio.irmap = map;
+                map.forEach(full => {
+                    let short = full.split('/');
+                    Audio.fetchSample(`assets/irs/${full}.wav`, full, short[short.length - 1]);
+                });
+                Audio.fetching--;
             });
-            Audio.fetching--;
-        });
 
-        Audio.log('[init] Starting update loop');
-        window.requestAnimationFrame(Audio.update);
+            Audio.log('[init] Starting update loop');
+            window.requestAnimationFrame(Audio.update);
+        });
     }
     static initFetched() {
-        if (Audio.initFinished)
+        if (Audio.initFinished) {
+            if (Audio._initReject != null)
+                Audio._initReject();
             return;
+        }
         Audio.initFinished = true;
 
         Audio.log('[init] Hooray!');
 
-        Audio.masterConvolver.buffer = Audio.irs["halls/keno-2"];        
+        Audio.masterConvolver.buffer = Audio.irs["halls/keno-2"];
+
+        if (Audio._initResolve != null)
+            Audio._initResolve();
 
         // TODO: Remove this test.
         Audio.playLoop('8-bit-kick',  0, 0.00, 1);

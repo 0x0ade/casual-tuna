@@ -29,7 +29,7 @@ class KeyColoumn extends React.Component{
   render(){
     let rows = [];
     for (var i=0; i < this.props.pitches; i++) {
-      rows.push(<div className="key"></div>);
+      rows.push(<div className="key" key={i}></div>);
     }
     return (
       <div className="column">
