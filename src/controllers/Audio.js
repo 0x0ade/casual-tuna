@@ -26,6 +26,8 @@ export default class Audio {
         return b;
     }
 
+    static onBar = []
+
     static sources = []
 
     static modules = {}
@@ -401,7 +403,9 @@ export default class Audio {
             // Not "on beat."
             return;
 
-        // TODO: Any audio management (f.e. custom loops) should end up here.
+        // Any audio management (f.e. custom loops) should end up here.
+
+        Audio.onBar.forEach(cb => cb(b, Audio.time));
 
         Audio.loops.forEach(info => {
             if (b % (info.loopLength || Audio.loopLength) != info.position)

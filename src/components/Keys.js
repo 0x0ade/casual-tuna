@@ -1,6 +1,7 @@
 require('styles/Keys.scss');
 
 import React from 'react';
+import Audio from '../controllers/Audio';
 
 class Keys extends React.Component {
   render() {
@@ -32,6 +33,25 @@ Keys.defaultProps = {
 export default Keys;
 
 class KeyColoumn extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      highlighted: false
+    };
+
+    Audio.onBar.push(b => {
+      let isOnBar = b % (this.props.loop || Audio.loopLength) == this.props.time;
+      if (!isOnBar && this.state.highlighted)
+        this.setState(state => {
+          state.highlighted = false;
+        });
+      else if (isOnBar && !this.state.highlighted)
+        this.setState(state => {
+          state.highlighted = true;
+        });
+    });
+  }
 
   render() {
     let rows = [];
@@ -40,6 +60,13 @@ class KeyColoumn extends React.Component {
         module={this.props.module} note={this.props.pitches - i}
         onChange={(enabled, note) => this.props.onChange(enabled, note, this.props.time)}
       />);
+    }
+    if (this.state.highlighted) {
+      return (
+        <div className="column highlighted">
+          {rows}
+        </div>
+      );
     }
     return (
       <div className="column">
@@ -53,7 +80,8 @@ class KeyColoumn extends React.Component {
 KeyColoumn.defaultProps = {
   onChange: (enabled, note, time) => {},
   pitches: 5,
-  time: 0
+  time: 0,
+  loop: 1
 }
 
 class Key extends React.Component {
