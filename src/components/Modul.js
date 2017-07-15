@@ -7,7 +7,7 @@ import Controls from './Controls';
 class Modul extends React.Component {
   render() {
     let style = {
-      backgroundColor: this.props.color
+      "--color": this.props.color
     };
     return (
       <div className="modul" style={style}>
