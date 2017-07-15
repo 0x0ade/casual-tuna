@@ -18,7 +18,7 @@ class AppComponent extends React.Component {
   constructor(){
     super();
     this.state = {
-      activeLevel: 1
+      activeLevel: 2
     };
   }
 
