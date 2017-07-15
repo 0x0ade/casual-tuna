@@ -5,7 +5,10 @@ export default class Audio {
     static master = null
     static masterGain = null
     static masterFilter = null
-
+    static masterConvolverBypass = null
+    static masterConvolver = null
+    static masterConvolverGain = null
+    
     static bpm = 120
     static get speed() { return Audio.bpm / 240; }
 
@@ -26,6 +29,8 @@ export default class Audio {
 
     static samples = {}
     static samplemap = {}
+    static irs = {}
+    static irmap = []
 
     static loops = []
     static loopLength = 1
@@ -33,12 +38,15 @@ export default class Audio {
     static fetching = 0
     static fetchSample(url) {
         Audio.fetching++;
+        let target = Audio.samples;
+        if (url.startsWith('assets/irs/'))
+            target = Audio.irs;
         fetch(url)
         .then(response => response.arrayBuffer())
         .then(data => Audio.context.decodeAudioData(data))
         .then(sample => {
             for (let i = 0; i < arguments.length; i++)
-                Audio.samples[arguments[i]] = sample;
+                target[arguments[i]] = sample;
             Audio.fetching--;
             return sample;
         });
@@ -49,6 +57,7 @@ export default class Audio {
         data.volume = data.volume || 1;
         data.speed = data.speed || 1;
         data.detune = data.detune || 0;
+        data.destination = data.destination || data.dest || data.target || Audio.master;
 
         if (note != null && note != 0)
             name = `${name}${Audio.samplemap.notes[note - 1]}`;
@@ -59,7 +68,7 @@ export default class Audio {
         let reused;
         for (let i = 0; i < Audio.sources.length; i++) {
             info = Audio.sources[i];
-            if (info.free) {
+            if (info.free && info.destination == data.destination) {
                 info.free = false;
                 reused = true;
                 // Audio.log(`Reusing source #${i}`);
@@ -74,11 +83,12 @@ export default class Audio {
             reused = false;
             info = {
                 free: false,
+                destination: data.destination,
                 source: null,
                 gain: Audio.context.createGain()
             };
             // Audio.log(`New source #${Audio.sources.length}`);
-            info.gain.connect(Audio.master);
+            info.gain.connect(data.destination);
         }
         
         info.gain.gain.value = data.volume;
@@ -135,12 +145,26 @@ export default class Audio {
         Audio.masterFilter.frequency.value = Audio.context.sampleRate * 0.5;
         Audio.masterFilter.connect(Audio.masterGain);
 
+        Audio.masterConvolverBypass = Audio.context.createGain();
+        Audio.masterConvolverBypass.connect(Audio.masterFilter);
+        
+        Audio.masterConvolver = Audio.context.createConvolver();
+        Audio.masterConvolver.connect(Audio.masterConvolverBypass);
+
+        Audio.masterConvolverGain = Audio.context.createGain();
+        Audio.masterConvolverGain.connect(Audio.masterConvolver);
+
+        Audio.masterConvolverGain.gain.value = 0.5;
+        Audio.masterConvolverBypass.gain.value = 0.9;
+
         // What other nodes should see as "master output".
-        Audio.master = Audio.masterFilter;
-
-
-        Audio.log('[init] Filling samples');
+        Audio.master = Audio.context.createGain();
+        Audio.master.connect(Audio.masterConvolverGain);
+        Audio.master.connect(Audio.masterConvolverBypass);
+        
+        Audio.log('[init] Filling samples and irs');
         Audio.fetching++;
+        // TODO: Replace fetch json with require
         fetch('assets/samplemap.json').then(response => response.json())
         .then(map => {
             Audio.samplemap = map;
@@ -158,6 +182,18 @@ export default class Audio {
             Audio.fetching--;
         });
 
+        Audio.fetching++;
+        // TODO: Replace fetch json with require
+        fetch('assets/irmap.json').then(response => response.json())
+        .then(map => {
+            Audio.irmap = map;
+            map.forEach(full => {
+                let short = full.split('/');
+                Audio.fetchSample(`assets/irs/${full}.wav`, full, short[short.length - 1]);
+            });
+            Audio.fetching--;
+        });
+
         Audio.log('[init] Starting update loop');
         window.requestAnimationFrame(Audio.update);
     }
@@ -167,6 +203,8 @@ export default class Audio {
         Audio.initFinished = true;
 
         Audio.log('[init] Hooray!');
+
+        Audio.masterConvolver.buffer = Audio.irs["halls/keno-2"];        
 
         // TODO: Remove this test.
         Audio.playLoop('8-bit-kick',  0, 0.00, 1);
