@@ -10,7 +10,7 @@ class Controls extends React.Component {
     console.log(e);
   }
   render() {
-    let icon = require("../images/audio.svg");
+    let icon = require('../images/sound.png');
     return (
       <div className="controls">
         <IconSlider icon={icon} onChange={this.test}/>
