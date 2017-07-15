@@ -2,9 +2,10 @@ require('normalize.css/normalize.css');
 require('styles/App.scss');
 
 import React from 'react';
-import Audio from '../controllers/Audio.js';
 
+import Audio from '../controllers/Audio.js';
 Audio.init();
+
 import Modul from './Modul';
 
 let yeomanImage = require('../images/yeoman.png');
