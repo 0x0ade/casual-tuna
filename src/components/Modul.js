@@ -18,6 +18,10 @@ class Modul extends React.Component {
     Audio.setLoop(enabled, `module:${this.props.name}`, note, time, loop);
   }
 
+  onChangeInstrument(e) {
+    Audio.setInstrument(this.props.name, e.target.value);
+  }
+
   render() {
     let style = {
       "--color": "var(" + this.props.color +")",
@@ -25,7 +29,7 @@ class Modul extends React.Component {
     };
     return (
       <div className="modul" style={style}>
-        <select>
+        <select onChange={this.onChangeInstrument.bind(this)}>
           {this.props.instruments.map(function(inst) {
             return <option key={"instrument" + inst.id} value={inst.id}>{inst.name}</option>
           })}
