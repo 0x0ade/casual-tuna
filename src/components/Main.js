@@ -24,7 +24,7 @@ class AppComponent extends React.Component {
     this.state = {
       activeLevel: Score.data.level
     };
-    Score.onLevelUp = level => this.setState(state => {
+    Score.onLevelUp.push(level => this.setState(state => {
       if (state.activeLevel == 0 && level == 1) {
         console.log('Switching from level 1 to level 2, applying special case for module transfer');
         Audio.loops.forEach(info => {
@@ -37,7 +37,7 @@ class AppComponent extends React.Component {
 
       state.activeLevel = level;
       return state;
-    });
+    }));
   }
 
   render() {

@@ -10,9 +10,30 @@
   box-sizing: border-box;
 
   .scorebar-wrap, .scorebar {
+    position: relative;
     border-radius: 5px;
-    width: 10vw;
-    height: 32px;
-    background: red;
+    width: 15vw;
+    height: 100%;
+    background: #617c8c;
+    padding: 4px;
+    display: inline-block;
   }
+  .scorebar-wrap {
+    box-shadow: 0 1px 0 #2b4d64 inset;    
+  }
+  .scorebar {
+    transition: width 0.5s;
+    // hacky hackingly hardcoded padding hack
+    max-width: calc(15vw - 8px);
+    height: calc(100% - 8px);
+    background: linear-gradient(90deg, #009de6 0%, #00df6f 100%);    
+  }
+  .score {
+    position: relative;
+    color: white;
+    display: inline-block;
+    margin-left: 8px;
+    top: calc(-100% + 21px);
+  }
+
 }

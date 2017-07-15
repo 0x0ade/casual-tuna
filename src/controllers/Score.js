@@ -6,8 +6,11 @@ class Score {
     static get data() {return window.ScoreData;}
     static set data(value) {window.ScoreData = value;}
 
-    static onLevelUp = null
+    static get toNextLevel() {return 130 * (Score.data.level + 1);}
 
+    static onChange = []
+    static onLevelUp = []
+    
     static init() {
         window.Score = Score;
         Score.load();
@@ -41,15 +44,14 @@ class Score {
     static validate() {
         Score.data.flags['FirstSteps'] = Score.data.level != 0;
 
-        let scorePerLevel = 200 * (Score.data.level + 1);
-        while (Score.data.score >= scorePerLevel) {
+        while (Score.data.score >= Score.toNextLevel) {
             Score.log(`Level up: ${Score.data.level}`)
-            Score.data.score -= scorePerLevel;
+            Score.data.score -= Score.toNextLevel;
             Score.data.level++;
-            if (Score.onLevelUp != null)
-                Score.onLevelUp(Score.data.level);
+            Score.onLevelUp.forEach(f => f(Score.data.level));
         }
 
+        Score.onChange.forEach(f => f(Score.data));
         Score.save();
     }
 

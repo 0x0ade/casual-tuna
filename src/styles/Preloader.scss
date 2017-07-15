@@ -18,7 +18,7 @@
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
-        animation: preloader-logo 2s infinite ease-in-out;
+        animation: preloader-logo 2s infinite ease-in-out forwards;
         &.clicked {
             animation: preloader-logo-clicked 0.5s infinite linear;        
         }
@@ -46,8 +46,8 @@
 }
 
 @keyframes preloader-logo-fadeout {
-    0% {transform: translate(-50%, -50%) scale(1.0);}
-    100% {transform: translate(-50%, -50%) scale(0.9);}
+    0% {}
+    100% {transform: translate(-50%, -50%) scale(1.1);}
 }
 
 @keyframes preloader-logo-clicked {
