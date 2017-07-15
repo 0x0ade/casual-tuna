@@ -16,8 +16,6 @@ import Level4 from '../levels/Level4';
 
 Score.init();
 
-let background = require('../images/background.jpg');
-
 class AppComponent extends React.Component {
   constructor(){
     super();
@@ -44,7 +42,13 @@ class AppComponent extends React.Component {
     return (
       <Preloader>
         <div className="index">
-          {this.props.levels[Math.min(this.state.activeLevel, this.props.levels.length - 1)]}
+          {this.props.levels.map(function (level, i) {
+            if(i != this.state.activeLevel){
+              return <div className="inactive-level">{level}</div>
+            }else{
+              return level;
+            }
+          }.bind(this))}
           <Levelbar/>
         </div>
       </Preloader>
