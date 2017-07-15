@@ -37,23 +37,48 @@ export default class Audio {
         data = data || {};
         data.volume = data.volume || 1;
 
-        if (note != null)
+        if (note != null && note != 0)
             name = `${name}${Audio.samplemap.notes[note - 1]}`;
 
-        // TODO: Ring buffer - reuse nodes!
+        var buffer = Audio.samples[name];
 
-        var source = Audio.context.createBufferSource();
-        source.buffer = Audio.samples[name];
-        var index = Audio.sources.length;
-        source.onended = () => Audio.sources.splice(index, 1);
+        var info;
+        var reused;
+        for (var i = 0; i < Audio.sources.length; i++) {
+            info = Audio.sources[i];
+            if (info.free) {
+                info.free = false;
+                reused = true;
+                Audio.log(`Reusing source #${i}`);
+                info.source.disconnect();
+                break;
+            }
+            if (i >= Audio.sources.length - 1)
+                info = null;
+        }
 
-        var gain = Audio.context.createGain();
-        gain.gain.value = data.volume;
-        source.connect(gain);
-        gain.connect(Audio.context.destination);
+        if (info == null) {
+            reused = false;
+            info = {
+                free: false,
+                source: null,
+                gain: Audio.context.createGain()
+            };
+            Audio.log(`New source #${Audio.sources.length}`);
+            info.gain.connect(Audio.context.destination);
+        }
+        
+        info.gain.gain.value = data.volume;
 
-        Audio.sources.push({source: source, gain: gain});        
-        source.start();
+        info.source = Audio.context.createBufferSource();
+        info.source.connect(info.gain);
+        
+        info.source.buffer = buffer;
+        info.source.onended = () => info.free = true;
+        info.source.start();
+
+        if (!reused)
+            Audio.sources.push(info);
     }
 
     static inited = false;
@@ -67,7 +92,6 @@ export default class Audio {
         Audio.context = new AudioContext();
 
         Audio.log('[init] Filling samples');
-        // Audio.fetchSample('test', 'assets/samples/test.wav');
         Audio.fetching++;
         fetch('assets/samplemap.json').then(response => response.json())
         .then(map => {
