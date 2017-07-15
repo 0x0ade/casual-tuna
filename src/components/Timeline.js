@@ -1,12 +1,66 @@
 require('styles/Timeline.scss');
 
 import React from 'react';
+import Audio from '../controllers/Audio';
 
 class Timeline extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      measures: [
+        [false, false, false],
+        [false, false, false],
+        [false, false, false],
+        [false, false, false],
+        [false, false, false],
+        [false, false, false],
+        [false, false, false],
+        [false, false, false],
+        [false, false, false],
+        [false, false, false]
+      ],
+      selected: 0
+    }
+
+    Audio.onSetTimeline.push(i => this.setState({
+      selected: i
+    }));
+
+    Audio.onUpdateLoop.push(loops => {
+      var values = [false, false, false];
+      loops.forEach(info => {
+        switch (info.name.substr('module:'.length)) {
+          case 'Drums':
+          values[0] = true;
+          break;
+
+          case 'Bass':
+          values[1] = true;
+          break;
+
+          case 'Keyboard':
+          values[2] = true;
+          break;
+        }
+      });
+      this.state.measures[Audio.currentTimeline] = values;
+      this.forceUpdate();
+    });
+
+  }
+
+  onSelect(i) {
+    Audio.setTimeline(i);
+  }
+
   render() {
     let measures = [];
-    for(var i = 0; i < this.props.measures.length; i++){
-      measures.push(<Measure active={this.props.measures[i]} />)
+    for (var i = 0; i < this.state.measures.length; i++){
+      if (i == this.state.selected)
+        measures.push(<Measure className="enabled" key={i} index={i} active={this.state.measures[i]} onSelect={this.onSelect.bind(this)} />);
+      else
+        measures.push(<Measure key={i} index={i} active={this.state.measures[i]} onSelect={this.onSelect.bind(this)} />);      
     }
     return (
       <div className="timeline">
@@ -17,19 +71,7 @@ class Timeline extends React.Component {
 }
 
 Timeline.defaultProps = {
-  measures: [
-    [false, false, false],
-    [false, true, true],
-    [true, true, false],
-    [false, false, false],
-    [false, true, false],
-    [false, true, true],
-    [false, false, false],
-    [true, true, true],
-    [true, true, true],
-    [false, true, true],
-    [false, true, true]
-  ],
+  
 };
 
 export default Timeline;
@@ -38,23 +80,23 @@ class Measure extends React.Component{
   render(){
     let lines = [];
     if(this.props.active[0]){
-      lines.push(<div className="line" style={{"--color": "var(--color-green-light)"}}></div>);
+      lines.push(<div key="a" className="line" style={{"--color": "var(--color-green-light)"}}></div>);
     }else{
-      lines.push(<div className="line" style={{"--color": "var(--color-faded)"}}></div>);
+      lines.push(<div key="b" className="line" style={{"--color": "var(--color-faded)"}}></div>);
     }
     if(this.props.active[1]){
-      lines.push(<div className="line" style={{"--color": "var(--color-red-light)"}}></div>);
+      lines.push(<div key="c" className="line" style={{"--color": "var(--color-red-light)"}}></div>);
     }else{
-      lines.push(<div className="line" style={{"--color": "var(--color-faded)"}}></div>);
+      lines.push(<div key="d" className="line" style={{"--color": "var(--color-faded)"}}></div>);
     }
     if(this.props.active[2]){
-      lines.push(<div className="line" style={{"--color": "var(--color-blue-light)"}}></div>);
+      lines.push(<div key="e" className="line" style={{"--color": "var(--color-blue-light)"}}></div>);
     }else{
-      lines.push(<div className="line" style={{"--color": "var(--color-faded)"}}></div>);
+      lines.push(<div key="f" className="line" style={{"--color": "var(--color-faded)"}}></div>);
     }
 
     return (
-      <div className="measure">
+      <div className={this.props.className + " measure"} onClick={() => this.props.onSelect(this.props.index)}>
         {lines}
       </div>
     );
@@ -62,5 +104,7 @@ class Measure extends React.Component{
 }
 
 Measure.defaultProps = {
-  active: [true, false, false]
+  active: [true, false, false],
+  onSelect: (i) => {},
+  index: 0
 };

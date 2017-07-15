@@ -42,6 +42,12 @@ export default class Audio {
 
     static scheduledRefreshes = []
 
+    static timeline = []
+    static currentTimeline = 0
+
+    static onSetTimeline = []
+    static onUpdateLoop = []
+    
     static fetching = 0
     static fetchSample(url) {
         Audio.fetching++;
@@ -77,6 +83,15 @@ export default class Audio {
         Audio.modules[module].volume = value;
     }
 
+    static setTimeline(i) {
+        Audio.log(`Setting timeline to #${i}`); 
+        Audio.timeline[Audio.currentTimeline] = Audio.loops;
+        Audio.loops = Audio.timeline[i];
+        Audio.currentTimeline = i;
+        Audio.forceRefresh();
+        Audio.onSetTimeline.forEach(f => f(i, Audio.loops));
+    }
+
     static play(name, note, data) {
         if (name === 'default')
             name = 'acoustic-kit/piano'
@@ -95,6 +110,9 @@ export default class Audio {
         data.volume = data.volume != null ? data.volume : 1;
         data.speed = data.speed != null ? data.speed : 1;
         data.detune = data.detune != null ? data.detune : 0;
+
+        if (data.volume <= 0)
+            return;
 
         if (name.endsWith(':drums')) {
             // TODO: Don't hardcode this?
@@ -185,11 +203,16 @@ export default class Audio {
             note: note,
             position: position,
             loopLength: loopLength,
-            data: data,
-            stop: () => Audio.loops.splice(Audio.loops.indexOf(info), 1)
+            data: data
         };
         Audio.loops.push(info);
+        Audio.onUpdateLoop.forEach(f => f(Audio.loops));
         return info;
+    }
+
+    static stopLoop(info) {
+        Audio.loops.splice(Audio.loops.indexOf(info), 1);
+        Audio.onUpdateLoop.forEach(f => f(Audio.loops));
     }
 
     static setLoop(enabled, name, note, position, loopLength, data) {
@@ -210,7 +233,7 @@ export default class Audio {
         if (info == null && enabled)
             Audio.playLoop(name, note, position, loopLength, data);
         else if (info != null && !enabled)
-            info.stop();
+            Audio.stopLoop(info);
 
         if (data != null && data.updateModule != null) {
             // Dirty dirty horrible hack: Access the targetted module (if any) and "reset" key states.
@@ -229,6 +252,33 @@ export default class Audio {
         let notes = module.refs.keys.props.notes;
         module.state.values[loop.position / loop.loopLength * notes][loop.note - 1] = true;
         module.forceUpdate();
+    }
+
+    static forceRefresh() {
+        Audio.log('Forcibly refreshing every module');
+        
+        for (let key in CTModules) {
+            let module = CTModules[key];
+
+            if (module.refs.keys.props == null)
+                return;
+
+            let notes = module.refs.keys.props.notes;
+            for (let i = 0; i < module.state.values.length; i++) {
+                let values = module.state.values[i];
+                for (let ii = 0; ii < values.length; ii++) {
+                    values[ii] = false;
+                }
+            }
+
+            module.forceUpdate();
+        };
+
+        Audio.loops.forEach(info => {
+            let moduleName = info.name.substr('module:'.length);
+            let module = window.CTModules[moduleName];
+            Audio.refreshModule(module, info);
+        });
     }
 
     static scheduleRefreshModule(loop) {
@@ -322,6 +372,9 @@ export default class Audio {
                 Audio.fetching--;
             });
 
+            for (let i = 0; i < 10; i++)
+                Audio.timeline.push([]); 
+
             Audio.log('[init] Starting update loop');
             window.requestAnimationFrame(Audio.update);
         });
@@ -340,56 +393,6 @@ export default class Audio {
 
         if (Audio._initResolve != null)
             Audio._initResolve();
-
-        // TODO: Remove this test.
-        /*
-        Audio.playLoop('8-bit-kick',  0, 0.00, 1);
-        Audio.playLoop('8-bit-snare', 0, 0.25, 1);
-        // Audio.playLoop('8-bit-kick',  0, 0.50, 1);
-        Audio.playLoop('8-bit-kick',  0, 0.50, 1, {volume: 0.7, speed: 4.0});
-        Audio.playLoop('8-bit-kick',  0, 0.625, 1);
-        Audio.playLoop('8-bit-snare', 0, 0.75, 1);
-
-        for (let i = 1; i < 8; i += 2)
-            Audio.playLoop('8-bit-snare', 0, 0.125 * i, 1, {volume: 0.7, speed: 4.0});
-
-        for (let i = 1; i < 16; i += 2)
-            Audio.playLoop('8-bit-snare', 0, 0.0625 * i, 1, {volume: 0.5, speed: 6.0});
-        Audio.playLoop('8-bit-bass', 1, 0.00, 2);
-        Audio.playLoop('8-bit-bass', 2, 0.50, 2);
-        Audio.playLoop('8-bit-bass', 3, 1.00, 2);
-        Audio.playLoop('8-bit-bass', 2, 1.50, 2);
-
-        Audio.playLoop('8-bit-lead', 1, 0.00, 4);
-        Audio.playLoop('8-bit-lead', 2, 0.25, 4);
-        Audio.playLoop('8-bit-lead', 3, 0.50, 4);
-        Audio.playLoop('8-bit-lead', 4, 0.75, 4);
-
-        Audio.playLoop('8-bit-lead', 1, 0.00, 4, {volume: 0.5, speed: 0.5});
-        Audio.playLoop('8-bit-lead', 2, 0.25, 4, {volume: 0.5, speed: 0.5});
-        Audio.playLoop('8-bit-lead', 3, 0.50, 4, {volume: 0.5, speed: 0.5});
-        Audio.playLoop('8-bit-lead', 4, 0.75, 4, {volume: 0.5, speed: 0.5});
-
-        Audio.playLoop('piano', 1, 1.00, 4, {volume: 0.5, speed: 0.5});
-        Audio.playLoop('piano', 2, 1.25, 4, {volume: 0.5, speed: 1});
-        Audio.playLoop('piano', 3, 1.50, 4, {volume: 0.5, speed: 0.5});
-        Audio.playLoop('piano', 4, 1.75, 4, {volume: 0.5, speed: 1});
-
-        Audio.playLoop('8-bit-lead', 5, 2.00, 4);
-        Audio.playLoop('8-bit-lead', 4, 2.25, 4);
-        Audio.playLoop('8-bit-lead', 3, 2.50, 4);
-        Audio.playLoop('8-bit-lead', 2, 2.75, 4);
-
-        Audio.playLoop('8-bit-lead', 5, 2.00, 4, {volume: 0.5, speed: 0.5});
-        Audio.playLoop('8-bit-lead', 4, 2.25, 4, {volume: 0.5, speed: 0.5});
-        Audio.playLoop('8-bit-lead', 3, 2.50, 4, {volume: 0.5, speed: 0.5});
-        Audio.playLoop('8-bit-lead', 2, 2.75, 4, {volume: 0.5, speed: 0.5});
-
-        Audio.playLoop('piano', 5, 3.00, 4, {volume: 0.5, speed: 0.5});
-        Audio.playLoop('piano', 4, 3.25, 4, {volume: 0.5, speed: 1});
-        Audio.playLoop('piano', 3, 3.50, 4, {volume: 0.5, speed: 0.5});
-        Audio.playLoop('piano', 2, 3.75, 4, {volume: 0.5, speed: 1});
-        */
 
     }
 

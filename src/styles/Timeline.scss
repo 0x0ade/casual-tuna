@@ -9,10 +9,16 @@
     cursor: pointer;
 
     .line {
+      transition: box-shadow 0.2s;
       width: calc(100% - 4px);
       height: calc(33% - 8px);
       margin: 4px 2px;
       background-color: var(--color);
+      box-shadow: none;
+    }
+
+    &.enabled .line {
+      box-shadow: 0 0 16px var(--color);
     }
   }
 }

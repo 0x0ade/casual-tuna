@@ -5,7 +5,10 @@
     bottom: 0;
     right: 0;
     z-index: 1000;
-    background: #2B4565;
+    background-image: url("../images/loading-background.png");
+    
+    background-size: cover;
+    background-repeat: no-repeat;
 
     & #logo {
         position: absolute;

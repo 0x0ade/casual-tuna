@@ -1,5 +1,3 @@
-require('styles/Level2.scss');
-
 import React from 'react';
 import Modul from '../components/Modul';
 

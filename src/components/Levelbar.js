@@ -28,7 +28,7 @@ class Levelbar extends React.Component {
         <div className="scorebar-wrap">
           <div className="scorebar" style={{"width": `calc(${15 * this.state.score / this.state.scoreMax}vw - 8px)`}}></div>
         </div>
-        <span className="score">LV {this.state.level}</span>
+        <span className="score">LVL {this.state.level}</span>
       </div>
     );
   }

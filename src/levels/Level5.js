@@ -2,10 +2,10 @@ import React from 'react';
 import Modul from '../components/Modul';
 import Timeline from '../components/Timeline';
 
-class Level4 extends React.Component {
+class Level5 extends React.Component {
 
   render() {
-    return (<div className="level level4">
+    return (<div className="level level5">
       <header className="header">
         <Timeline/>
       </header>
@@ -26,13 +26,20 @@ class Level4 extends React.Component {
         ]}
           color={"--color-red"}
         />
+        <Modul name="Keyboard" instruments={[
+          // {name: "Piano", id: "acoustic-kit/piano"},
+          {name: "Saxophone", id: "acoustic-kit/saxophone"},
+          {name: "8-Bit Lead", id: "8-bit/8-bit-lead"},
+          {name: "Dubstep Lead", id: "dubstep/lead"}
+          ]}
+        />
       </div>
     </div>);
   }
 }
 
-Level4.defaultProps = {
+Level5.defaultProps = {
 
 };
 
-export default Level4;
+export default Level5;
