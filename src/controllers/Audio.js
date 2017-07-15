@@ -116,6 +116,9 @@ export default class Audio {
             // Old instance still hanging around somewhere - kill it with fire!
             window.CTAudio.context.close();
             window.CTAudio.context = null;
+            Audio.time = window.CTAudio.time;
+            Audio.bpm = window.CTAudio.bpm;
+            Audio.paused = window.CTAudio.paused;
         }
         window.CTAudio = Audio;
         if (Audio.inited)
@@ -129,6 +132,7 @@ export default class Audio {
         Audio.masterGain.connect(Audio.context.destination);
 
         Audio.masterFilter = Audio.context.createBiquadFilter();
+        Audio.masterFilter.frequency.value = Audio.context.sampleRate * 0.5;
         Audio.masterFilter.connect(Audio.masterGain);
 
         // What other nodes should see as "master output".
@@ -177,22 +181,31 @@ export default class Audio {
 
         for (var i = 1; i < 16; i += 2)
             Audio.playLoop('8-bit-snare', 0, 0.0625 * i, 1, {volume: 0.5, speed: 6.0});
-        
 
-        Audio.playLoop('8-bit-bass',  1, 0.00, 2);
-        Audio.playLoop('8-bit-bass',  2, 0.50, 2);
-        Audio.playLoop('8-bit-bass',  3, 1.00, 2);
-        Audio.playLoop('8-bit-bass',  2, 1.50, 2);
+        Audio.playLoop('8-bit-bass', 1, 0.00, 2);
+        Audio.playLoop('8-bit-bass', 2, 0.50, 2);
+        Audio.playLoop('8-bit-bass', 3, 1.00, 2);
+        Audio.playLoop('8-bit-bass', 2, 1.50, 2);
 
-        Audio.playLoop('8-bit-lead',  1, 0.00, 4);
-        Audio.playLoop('8-bit-lead',  2, 0.25, 4);
-        Audio.playLoop('8-bit-lead',  3, 0.50, 4);
-        Audio.playLoop('8-bit-lead',  4, 0.75, 4);
+        Audio.playLoop('8-bit-lead', 1, 0.00, 4);
+        Audio.playLoop('8-bit-lead', 2, 0.25, 4);
+        Audio.playLoop('8-bit-lead', 3, 0.50, 4);
+        Audio.playLoop('8-bit-lead', 4, 0.75, 4);
 
-        Audio.playLoop('8-bit-lead',  5, 2.00, 4);
-        Audio.playLoop('8-bit-lead',  4, 2.25, 4);
-        Audio.playLoop('8-bit-lead',  3, 2.50, 4);
-        Audio.playLoop('8-bit-lead',  2, 2.75, 4);
+        Audio.playLoop('piano', 1, 1.00, 4);
+        Audio.playLoop('piano', 2, 1.25, 4);
+        Audio.playLoop('piano', 3, 1.50, 4);
+        Audio.playLoop('piano', 4, 1.75, 4);
+
+        Audio.playLoop('8-bit-lead', 5, 2.00, 4);
+        Audio.playLoop('8-bit-lead', 4, 2.25, 4);
+        Audio.playLoop('8-bit-lead', 3, 2.50, 4);
+        Audio.playLoop('8-bit-lead', 2, 2.75, 4);
+
+        Audio.playLoop('piano', 5, 3.00, 4);
+        Audio.playLoop('piano', 4, 3.25, 4);
+        Audio.playLoop('piano', 3, 3.50, 4);
+        Audio.playLoop('piano', 2, 3.75, 4);
 
     }
 
@@ -237,8 +250,6 @@ export default class Audio {
                 return;
             Audio.play(info.name, info.note, info.data);
         });
-
-        Audio.masterFilter.frequency.value = 10 + 11015 + Math.sin(b) * 11015;
 
     }
 }
