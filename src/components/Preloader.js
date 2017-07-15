@@ -17,7 +17,7 @@ class Preloader extends React.Component {
                 state.finished = true;
                 return state;
             });
-            return new Promise(resolve => setTimeout(resolve, 2000));
+            return new Promise(resolve => setTimeout(resolve, 400));
         }).then(() => {
             this.setState(state => {
                 state.removed = true;

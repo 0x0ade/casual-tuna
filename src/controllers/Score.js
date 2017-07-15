@@ -6,6 +6,8 @@ class Score {
     static get data() {return window.ScoreData;}
     static set data(value) {window.ScoreData = value;}
 
+    static onLevelUp = null
+
     static init() {
         window.Score = Score;
         Score.load();
@@ -39,22 +41,21 @@ class Score {
     static validate() {
         Score.data.flags['FirstSteps'] = Score.data.level != 0;
 
-        let scorePerLevel = 100 * (Score.data.level + 1);
+        let scorePerLevel = 200 * (Score.data.level + 1);
         while (Score.data.score >= scorePerLevel) {
             Score.log(`Level up: ${Score.data.level}`)
             Score.data.score -= scorePerLevel;
             Score.data.level++;
+            if (Score.onLevelUp != null)
+                Score.onLevelUp(Score.data.level);
         }
 
         Score.save();
     }
 
     static progress(e, score) {
-        if (!Score.data.flags['FirstSteps']) {
-            if (e == 'passive')
+        if (!Score.data.flags['FirstSteps'] && e == 'passive')
                 return;
-            score *= 2;
-        }
 
         if (Score.data.progress[e] == null)
             Score.data.progress[e] = score;

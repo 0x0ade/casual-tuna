@@ -6,6 +6,12 @@ import IconSlider from './Slider';
 import 'rc-slider/assets/index.css';
 
 class Controls extends React.Component {
+  constructor(props) {
+    super(props);
+
+    props.onChangeVolume(0.5); // Default value.
+  }
+
   render() {
     let icon = require('../images/sound.png');
     return (
