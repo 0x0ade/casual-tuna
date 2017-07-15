@@ -27,6 +27,8 @@ export default class Audio {
 
     static sources = []
 
+    static modules = {}
+
     static samples = {}
     static samplemap = {}
     static irs = {}
@@ -52,15 +54,38 @@ export default class Audio {
         });
     }
 
+    static initModule(module) {
+        return Audio.modules[module] = {
+            instrument: null,
+            volume: 1,
+            target: null
+        };
+    }
+
+    static setInstrument(module, instrument) {
+        Audio.initModule(module);
+        Audio.modules[module].instrument = instrument;
+    }
+
     static play(name, note, data) {
         if (name === 'default')
             name = 'acoustic-kit/piano'
 
         data = data || {};
+
+        if (name.startsWith('module:')) {
+            let mod = Audio.modules[name.substr('module:'.length)];
+            if (mod != null) {
+                name = mod.instrument;
+                data.volume = data.volume || mod.volume;
+                data.target = data.target || mod.target;
+            }
+        }
+
         data.volume = data.volume || 1;
         data.speed = data.speed || 1;
         data.detune = data.detune || 0;
-        data.destination = data.destination || data.dest || data.target || Audio.master;
+        data.target = data.target || Audio.master;
 
         if (note != null && note != 0)
             name = `${name}${Audio.samplemap.notes[Math.floor((note - 1) / 5)][(note - 1) % 5]}`;
@@ -71,7 +96,7 @@ export default class Audio {
         let reused;
         for (let i = 0; i < Audio.sources.length; i++) {
             info = Audio.sources[i];
-            if (info.free && info.destination == data.destination) {
+            if (info.free && info.target == data.target) {
                 info.free = false;
                 reused = true;
                 // Audio.log(`Reusing source #${i}`);
@@ -86,12 +111,12 @@ export default class Audio {
             reused = false;
             info = {
                 free: false,
-                destination: data.destination,
+                target: data.target,
                 source: null,
                 gain: Audio.context.createGain()
             };
             // Audio.log(`New source #${Audio.sources.length}`);
-            info.gain.connect(data.destination);
+            info.gain.connect(data.target);
         }
         
         info.gain.gain.value = data.volume;

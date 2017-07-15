@@ -9,6 +9,7 @@ class Keys extends React.Component {
     let rows = [];
     for (let i = 0; i < this.props.notes; i++) {
       rows.push(<KeyColoumn
+        module={this.props.module}
         pitches={this.props.pitches}
         time={i / this.props.notes * this.props.loop}
         loop={this.props.loop}
@@ -24,6 +25,7 @@ class Keys extends React.Component {
 }
 
 Keys.defaultProps = {
+  module: null,
   pitches: 5,
   notes: 4,
   loop: 1
@@ -36,7 +38,7 @@ class KeyColoumn extends React.Component {
   render() {
     let rows = [];
     for (let i = 0; i < this.props.pitches; i++) {
-      rows.push(<Key note={this.props.pitches - i} time={this.props.time} loop={this.props.loop}/>);
+      rows.push(<Key module={this.props.module} note={this.props.pitches - i} time={this.props.time} loop={this.props.loop}/>);
     }
     return (
       <div className="column">
@@ -48,6 +50,7 @@ class KeyColoumn extends React.Component {
 }
 
 KeyColoumn.defaultProps = {
+  module: null,
   pitches: 5,
   time: 0,
   loop: 1
@@ -67,7 +70,7 @@ class Key extends React.Component {
     enable() {
       this.setState(state => {
         state.enabled = true;
-        state.loop = Audio.playLoop(this.props.instrument, this.props.note, this.props.time, this.props.loop);
+        state.loop = Audio.playLoop(`module:${this.props.module}`, this.props.note, this.props.time, this.props.loop);
         return state;
       });
     }
@@ -90,7 +93,7 @@ class Key extends React.Component {
 }
 
 Key.defaultProps = {
-  instrument: 'default',
+  module: null,
   note: 1,
   time: 0,
   loop: 1
