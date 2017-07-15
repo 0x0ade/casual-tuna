@@ -22,7 +22,9 @@ class Preloader extends React.Component {
             return this.props.children;
 
         return (
-            <div className="preloader"></div>
+            <div className="preloader">
+                <div id="logo"></div>
+            </div>
         );
     }
 }
