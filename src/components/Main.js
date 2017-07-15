@@ -18,7 +18,7 @@ class AppComponent extends React.Component {
         </header>
         <div className="index">
           <Modul
-            instruments={[
+            name="Bass" instruments={[
             {name: "Bass", id: "acoustic-kit/bass"},
             {name: "8-Bit Bass", id: "8-bit/8-bit-bass"},
             {name: "Dubstep Bass", id: "dubstep/bass"}

@@ -55,7 +55,7 @@ export default class Audio {
     }
 
     static initModule(module) {
-        return Audio.modules[module] = {
+        return Audio.modules[module] = Audio.modules[module] || {
             instrument: null,
             volume: 1,
             target: null
@@ -65,6 +65,11 @@ export default class Audio {
     static setInstrument(module, instrument) {
         Audio.initModule(module);
         Audio.modules[module].instrument = instrument;
+    }
+
+    static setVolume(module, value) {
+        Audio.initModule(module);
+        Audio.modules[module].volume = value;
     }
 
     static play(name, note, data) {
@@ -77,14 +82,14 @@ export default class Audio {
             let mod = Audio.modules[name.substr('module:'.length)];
             if (mod != null) {
                 name = mod.instrument;
-                data.volume = data.volume || mod.volume;
+                data.volume = data.volume != null ? data.volume : mod.volume;
                 data.target = data.target || mod.target;
             }
         }
 
-        data.volume = data.volume || 1;
-        data.speed = data.speed || 1;
-        data.detune = data.detune || 0;
+        data.volume = data.volume != null ? data.volume : 1;
+        data.speed = data.speed != null ? data.speed : 1;
+        data.detune = data.detune != null ? data.detune : 0;
         data.target = data.target || Audio.master;
 
         if (note != null && note != 0)
@@ -270,8 +275,6 @@ export default class Audio {
 
         if (Audio._initResolve != null)
             Audio._initResolve();
-
-        Audio.playLoop('8-bit-kick',  0, 0.00, 1);        
 
         // TODO: Remove this test.
         /*
