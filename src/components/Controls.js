@@ -2,12 +2,14 @@ require('styles/Controls.scss');
 
 import React from 'react';
 import Button from './Button';
+import IconSlider from './Slider';
+import 'rc-slider/assets/index.css';
 
 class Controls extends React.Component {
   render() {
     return (
       <div className="controls">
-        <input type="range"/>
+        <IconSlider/>
         <Button>SOLO</Button>
       </div>
     );
