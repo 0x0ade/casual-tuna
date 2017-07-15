@@ -28,7 +28,7 @@ class Modul extends React.Component {
       window.CTModules[this.props.name] = this;
       Audio.loops.forEach(info => {
         if (info.name == `module:${this.props.name}`)
-          Audio.refreshModule(this, info);
+          Audio.scheduleRefreshModule(info);
       }, this);
     }
   }

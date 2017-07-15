@@ -11,6 +11,7 @@ import Timeline from './Timeline';
 import Level1 from '../levels/Level1';
 import Level2 from '../levels/Level2';
 import Level3 from '../levels/Level3';
+import Level4 from '../levels/Level4';
 
 Score.init();
 
@@ -56,7 +57,8 @@ AppComponent.defaultProps = {
   levels: [
     <Level1/>,
     <Level2/>,
-    <Level3/>
+    <Level3/>,
+    <Level4/>
   ]
 };
 

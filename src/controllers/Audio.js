@@ -224,6 +224,8 @@ export default class Audio {
     static refreshModule(module, loop) {
         Audio.log(`Refreshing loop in module ${module.props.name}`);
         
+        if (module.refs.keys.props == null)
+            return;
         let notes = module.refs.keys.props.notes;
         module.state.values[loop.position / loop.loopLength * notes][loop.note - 1] = true;
         module.forceUpdate();
