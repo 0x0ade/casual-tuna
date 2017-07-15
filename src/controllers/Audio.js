@@ -15,7 +15,7 @@ export default class Audio {
 
     static lastb = -1
     static get b() {
-        var b = Math.floor(Audio.time * 16.0) / 16.0;
+        let b = Math.floor(Audio.time * 16.0) / 16.0;
         if (b == Audio.lastb)
             return -1;
         Audio.lastb = b;
@@ -37,7 +37,7 @@ export default class Audio {
         .then(response => response.arrayBuffer())
         .then(data => Audio.context.decodeAudioData(data))
         .then(sample => {
-            for (var i = 0; i < arguments.length; i++)
+            for (let i = 0; i < arguments.length; i++)
                 Audio.samples[arguments[i]] = sample;
             Audio.fetching--;
             return sample;
@@ -53,11 +53,11 @@ export default class Audio {
         if (note != null && note != 0)
             name = `${name}${Audio.samplemap.notes[note - 1]}`;
 
-        var buffer = Audio.samples[name];
+        let buffer = Audio.samples[name];
 
-        var info;
-        var reused;
-        for (var i = 0; i < Audio.sources.length; i++) {
+        let info;
+        let reused;
+        for (let i = 0; i < Audio.sources.length; i++) {
             info = Audio.sources[i];
             if (info.free) {
                 info.free = false;
@@ -97,7 +97,7 @@ export default class Audio {
     }
 
     static playLoop(name, note, position, loopLength, data) {
-        var info = {
+        let info = {
             name: name,
             note: note,
             position: position,
@@ -146,13 +146,13 @@ export default class Audio {
             Audio.samplemap = map;
             map.instruments.forEach(instr => {
                 map.notes.forEach(note => {
-                    var full = `${instr}${note}`;
-                    var short = full.split('/');
+                    let full = `${instr}${note}`;
+                    let short = full.split('/');
                     Audio.fetchSample(`assets/samples/${full}.ogg`, full, short[short.length - 1]);
                 });
             });
             map.samples.forEach(full => {
-                var short = full.split('/');
+                let short = full.split('/');
                 Audio.fetchSample(`assets/samples/${full}.ogg`, full, short[short.length - 1]);
             });
             Audio.fetching--;
@@ -176,10 +176,10 @@ export default class Audio {
         Audio.playLoop('8-bit-kick',  0, 0.625, 1);
         Audio.playLoop('8-bit-snare', 0, 0.75, 1);
 
-        for (var i = 1; i < 8; i += 2)
+        for (let i = 1; i < 8; i += 2)
             Audio.playLoop('8-bit-snare', 0, 0.125 * i, 1, {volume: 0.7, speed: 4.0});
 
-        for (var i = 1; i < 16; i += 2)
+        for (let i = 1; i < 16; i += 2)
             Audio.playLoop('8-bit-snare', 0, 0.0625 * i, 1, {volume: 0.5, speed: 6.0});
 
         Audio.playLoop('8-bit-bass', 1, 0.00, 2);
@@ -192,20 +192,30 @@ export default class Audio {
         Audio.playLoop('8-bit-lead', 3, 0.50, 4);
         Audio.playLoop('8-bit-lead', 4, 0.75, 4);
 
-        Audio.playLoop('piano', 1, 1.00, 4);
-        Audio.playLoop('piano', 2, 1.25, 4);
-        Audio.playLoop('piano', 3, 1.50, 4);
-        Audio.playLoop('piano', 4, 1.75, 4);
+        Audio.playLoop('8-bit-lead', 1, 0.00, 4, {volume: 0.5, speed: 0.5});
+        Audio.playLoop('8-bit-lead', 2, 0.25, 4, {volume: 0.5, speed: 0.5});
+        Audio.playLoop('8-bit-lead', 3, 0.50, 4, {volume: 0.5, speed: 0.5});
+        Audio.playLoop('8-bit-lead', 4, 0.75, 4, {volume: 0.5, speed: 0.5});
+
+        Audio.playLoop('piano', 1, 1.00, 4, {volume: 0.5, speed: 0.5});
+        Audio.playLoop('piano', 2, 1.25, 4, {volume: 0.5, speed: 1});
+        Audio.playLoop('piano', 3, 1.50, 4, {volume: 0.5, speed: 0.5});
+        Audio.playLoop('piano', 4, 1.75, 4, {volume: 0.5, speed: 1});
 
         Audio.playLoop('8-bit-lead', 5, 2.00, 4);
         Audio.playLoop('8-bit-lead', 4, 2.25, 4);
         Audio.playLoop('8-bit-lead', 3, 2.50, 4);
         Audio.playLoop('8-bit-lead', 2, 2.75, 4);
 
-        Audio.playLoop('piano', 5, 3.00, 4);
-        Audio.playLoop('piano', 4, 3.25, 4);
-        Audio.playLoop('piano', 3, 3.50, 4);
-        Audio.playLoop('piano', 2, 3.75, 4);
+        Audio.playLoop('8-bit-lead', 5, 2.00, 4, {volume: 0.5, speed: 0.5});
+        Audio.playLoop('8-bit-lead', 4, 2.25, 4, {volume: 0.5, speed: 0.5});
+        Audio.playLoop('8-bit-lead', 3, 2.50, 4, {volume: 0.5, speed: 0.5});
+        Audio.playLoop('8-bit-lead', 2, 2.75, 4, {volume: 0.5, speed: 0.5});
+
+        Audio.playLoop('piano', 5, 3.00, 4, {volume: 0.5, speed: 0.5});
+        Audio.playLoop('piano', 4, 3.25, 4, {volume: 0.5, speed: 1});
+        Audio.playLoop('piano', 3, 3.50, 4, {volume: 0.5, speed: 0.5});
+        Audio.playLoop('piano', 2, 3.75, 4, {volume: 0.5, speed: 1});
 
     }
 
@@ -217,7 +227,7 @@ export default class Audio {
             return;
         window.requestAnimationFrame(Audio.update);
 
-        var oldtime = Audio.rawtime; // Stored temporarily. Audio.rawtime needs to update, but we maybe need its old value later.
+        let oldtime = Audio.rawtime; // Stored temporarily. Audio.rawtime needs to update, but we maybe need its old value later.
         Audio.rawtime = newtime;
 
         if (Audio.fetching) {
@@ -238,7 +248,7 @@ export default class Audio {
             return;
         Audio.time += (newtime - oldtime) * 0.001 * Audio.speed;
 
-        var b = Audio.b;
+        let b = Audio.b;
         if (b <= 0)
             // Not "on beat."
             return;
