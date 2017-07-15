@@ -1,6 +1,8 @@
 .controls {
   display: flex;
   flex-direction: row;
+  width: 100%;
+  position: relative;
 
   input {
     width: 50%;
@@ -8,10 +10,11 @@
   }
 
   .button {
-    width: calc(50% - 5px);
+    width: calc(50% - 10px);
   }
 
   .icon-slider {
-    width: calc(50% - 5px);
+    width: calc(50% - 10px);
+    margin-right: 10px;
   }
 }
