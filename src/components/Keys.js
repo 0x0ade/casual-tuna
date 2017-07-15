@@ -2,17 +2,15 @@ require('styles/Keys.scss');
 
 import React from 'react';
 
-import Audio from '../controllers/Audio';
-
 class Keys extends React.Component {
   render() {
     let rows = [];
     for (let i = 0; i < this.props.notes; i++) {
       rows.push(<KeyColoumn
-        module={this.props.module}
         pitches={this.props.pitches}
         time={i / this.props.notes * this.props.loop}
         loop={this.props.loop}
+        onChange={(enabled, note, time) => this.props.onChange(enabled, note, time, this.props.loop)}
       />);
     }
 
@@ -25,7 +23,7 @@ class Keys extends React.Component {
 }
 
 Keys.defaultProps = {
-  module: null,
+  onChange: (enabled, note, time, loop) => {},
   pitches: 5,
   notes: 4,
   loop: 1
@@ -38,7 +36,10 @@ class KeyColoumn extends React.Component {
   render() {
     let rows = [];
     for (let i = 0; i < this.props.pitches; i++) {
-      rows.push(<Key module={this.props.module} note={this.props.pitches - i} time={this.props.time} loop={this.props.loop}/>);
+      rows.push(<Key
+        module={this.props.module} note={this.props.pitches - i}
+        onChange={(enabled, note) => this.props.onChange(enabled, note, this.props.time)}
+      />);
     }
     return (
       <div className="column">
@@ -50,10 +51,9 @@ class KeyColoumn extends React.Component {
 }
 
 KeyColoumn.defaultProps = {
-  module: null,
+  onChange: (enabled, note, time) => {},
   pitches: 5,
-  time: 0,
-  loop: 1
+  time: 0
 }
 
 class Key extends React.Component {
@@ -62,15 +62,14 @@ class Key extends React.Component {
 
       this.state = {
         enabled: false,
-        highlighted: false,
-        loop: null
+        highlighted: false
       }
     }
 
     enable() {
       this.setState(state => {
         state.enabled = true;
-        state.loop = Audio.playLoop(`module:${this.props.module}`, this.props.note, this.props.time, this.props.loop);
+        this.props.onChange(true, this.props.note);
         return state;
       });
     }
@@ -78,7 +77,7 @@ class Key extends React.Component {
     disable() {
       this.setState(state => {
         state.enabled = false;
-        state.loop.stop();
+        this.props.onChange(false, this.props.note);
         return state;
       });
     }
@@ -93,8 +92,6 @@ class Key extends React.Component {
 }
 
 Key.defaultProps = {
-  module: null,
-  note: 1,
-  time: 0,
-  loop: 1
+  onChange: (enabled, note) => {},
+  note: 1
 }

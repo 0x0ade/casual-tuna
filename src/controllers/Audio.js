@@ -147,6 +147,27 @@ export default class Audio {
         return info;
     }
 
+    static setLoop(enabled, name, note, position, loopLength, data) {
+        let info = null;
+        for (let i = 0; i < Audio.loops.length; i++) {
+            info = Audio.loops[i];
+            if (
+                info.name == name &&
+                info.note == note &&
+                info.position == position &&
+                info.loopLength == loopLength &&
+                info.data == data
+            )
+                break;
+            info = null;
+        }
+
+        if (info == null && enabled)
+            Audio.playLoop(name, note, position, loopLength, data);
+        else if (info != null && !enabled)
+            info.stop();
+    }
+
     static inited = false
     static initFinished = false
     static _initPromise = null

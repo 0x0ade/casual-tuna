@@ -11,14 +11,21 @@ class Modul extends React.Component {
 
     Audio.initModule(this.props.name);
     Audio.setInstrument(this.props.name, this.props.instruments[0][1])
+    //state.loop = Audio.playLoop(`module:${this.props.module}`, this.props.note, this.props.time, this.props.loop);
+    //state.loop.stop();
+  }
+
+  onChangeKey(enabled, note, time, loop) {
+    console.log(enabled, `module:${this.props.name}`, note, time, loop);
+    Audio.setLoop(enabled, `module:${this.props.name}`, note, time, loop);
   }
 
   render() {
     return (
       <div className="modul">
         <h4>{this.props.name}</h4>
-        <Controls module={this.props.name} instruments={this.props.instruments} />
-        <Keys module={this.props.name} pitches={5} note={4}/>
+        <Controls instruments={this.props.instruments} />
+        <Keys pitches={5} note={4} onChange={this.onChangeKey.bind(this)}/>
       </div>
     );
   }
