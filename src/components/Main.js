@@ -2,10 +2,9 @@ require('normalize.css/normalize.css');
 require('styles/App.scss');
 
 import React from 'react';
-
 import Preloader from './Preloader';
-
 import Modul from './Modul';
+import Score from '../controllers/Score'
 
 let background = require('../images/background.jpg');
 
@@ -17,28 +16,28 @@ class AppComponent extends React.Component {
           <img src={background} />
         </header>
         <div className="index">
+          <Modul name="Lead" instruments={[
+            // {name: "Piano", id: "acoustic-kit/piano"},
+            {name: "Saxophone", id: "acoustic-kit/saxophone"},
+            {name: "8-Bit Lead", id: "8-bit/8-bit-lead"},
+            {name: "Dubstep Lead", id: "dubstep/lead"}
+            ]}
+          />
           <Modul
             name="Drums" instruments={[
             {name: "Acoustic Drums", id: "acoustic-kit/acoustic:drums"},
             {name: "8-Bit Drums", id: "8-bit/8-bit:drums"},
             {name: "Dubstep Drums", id: "dubstep/dub:drums"}
             ]}
-            color={"--color-red"}
+            color={"--color-green"}
           />
           <Modul
             name="Bass" instruments={[
             {name: "Bass", id: "acoustic-kit/bass"},
-            {name: "Saxophone", id: "acoustic-kit/saxophone"},
             {name: "8-Bit Bass", id: "8-bit/8-bit-bass"},
             {name: "Dubstep Bass", id: "dubstep/bass"}
             ]}
-            color={"--color-green"}
-          />
-          <Modul name="Keyboard" instruments={[
-            {name: "Piano", id: "acoustic-kit/piano"},
-            {name: "8-Bit Lead", id: "8-bit/8-bit-lead"},
-            {name: "Dubstep Lead", id: "dubstep/lead"}
-            ]}
+            color={"--color-red"}
           />
         </div>
       </Preloader>

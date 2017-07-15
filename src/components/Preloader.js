@@ -2,7 +2,7 @@ require('styles/Preloader.scss');
 
 import React from 'react';
 
-import Audio from '../controllers/Audio.js';
+import Audio from '../controllers/Audio';
 
 class Preloader extends React.Component {
     constructor(props) {
