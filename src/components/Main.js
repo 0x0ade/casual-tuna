@@ -18,7 +18,7 @@ class AppComponent extends React.Component {
   constructor(){
     super();
     this.state = {
-      activeLevel: 0
+      activeLevel: 1
     };
   }
 
@@ -29,7 +29,7 @@ class AppComponent extends React.Component {
           <img src={background} />
         </header>
         <div className="index">
-          {this.props.levels[0]}
+          {this.props.levels[this.state.activeLevel]}
         </div>
       </Preloader>
     );

@@ -1,7 +1,7 @@
 require('styles/Level2.scss');
 
 import React from 'react';
-import Keys from '../components/Keys';
+import Modul from '../components/Modul';
 
 class Level2 extends React.Component {
   render() {
@@ -14,14 +14,6 @@ class Level2 extends React.Component {
           {name: "Dubstep Drums", id: "dubstep/dub:drums"}
         ]}
           color={"--color-green"}
-        />
-        <Modul
-          name="Bass" instruments={[
-          {name: "Bass", id: "acoustic-kit/bass"},
-          {name: "8-Bit Bass", id: "8-bit/8-bit-bass"},
-          {name: "Dubstep Bass", id: "dubstep/bass"}
-        ]}
-          color={"--color-red"}
         />
       </div>
     );
