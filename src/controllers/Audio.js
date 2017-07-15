@@ -63,7 +63,7 @@ export default class Audio {
         data.destination = data.destination || data.dest || data.target || Audio.master;
 
         if (note != null && note != 0)
-            name = `${name}${Audio.samplemap.notes[note - 1]}`;
+            name = `${name}${Audio.samplemap.notes[Math.floor((note - 1) / 5)][(note - 1) % 5]}`;
 
         let buffer = Audio.samples[name];
 
@@ -178,11 +178,13 @@ export default class Audio {
             fetch('assets/samplemap.json').then(response => response.json())
             .then(map => {
                 Audio.samplemap = map;
-                map.instruments.forEach(instr => {
-                    map.notes.forEach(note => {
-                        let full = `${instr}${note}`;
-                        let short = full.split('/');
-                        Audio.fetchSample(`assets/samples/${full}.ogg`, full, short[short.length - 1]);
+                map.instruments.forEach((oct, octi) => {
+                    oct.forEach(instr => {
+                        map.notes[octi].forEach((note, notei) => {
+                            let full = `${instr}${note}`;
+                            let short = full.split('/');
+                            Audio.fetchSample(`assets/samples/${full}.ogg`, full, short[short.length - 1]);
+                        });
                     });
                 });
                 map.samples.forEach(full => {

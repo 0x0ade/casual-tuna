@@ -12,8 +12,8 @@ class AppComponent extends React.Component {
     return (
       <Preloader>
         <div className="index">
-          <Modul name="Base"></Modul>
-          <Modul name="Keyboard"></Modul>
+          <Modul name="Base" instruments={["Bass", "8-Bit Bass"]}/>
+          <Modul name="Keyboard" instruments={["Piano", "8-Bit Lead"]}/>
         </div>
       </Preloader>
     );

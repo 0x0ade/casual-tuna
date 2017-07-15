@@ -1,19 +1,38 @@
 {
     "notes": [
-        "01-cis",
-        "02-dis",
-        "03-fis",
-        "04-gis",
-        "05-ais"
+        [
+            "01-cis",
+            "02-dis",
+            "03-fis",
+            "04-gis",
+            "05-ais"
+        ],
+        [
+            "06-cis",
+            "07-dis",
+            "08-fis",
+            "09-gis",
+            "10-ais"
+        ]
     ],
     "instruments": [
-        "acoustic-kit/bass",
-        "acoustic-kit/piano",
-        "8-bit/8-bit-bass",
-        "8-bit/8-bit-lead"
+        [
+            "acoustic-kit/bass",
+            "acoustic-kit/piano",
+            "8-bit/8-bit-bass",
+            "8-bit/8-bit-lead",
+            "dubstep/bass",
+            "dubstep/lead"
+        ],
+        [
+            "dubstep/bass",
+            "dubstep/lead"
+        ]
     ],
     "samples": [
         "8-bit/8-bit-kick",
-        "8-bit/8-bit-snare"
+        "8-bit/8-bit-snare",
+        "dubstep/dub-kick",        
+        "dubstep/dub-snare"        
     ]
 }
