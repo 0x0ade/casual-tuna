@@ -4,6 +4,12 @@
   height: 20px;
   margin: 2px;
   cursor: pointer;
+  &.enabled {
+    background-color: white;
+  }
+  &.highlighted {
+    background-color: gainsboro;
+  }
 }
 
 .pitches {

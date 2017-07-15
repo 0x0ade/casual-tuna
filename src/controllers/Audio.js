@@ -53,6 +53,9 @@ export default class Audio {
     }
 
     static play(name, note, data) {
+        if (name === 'default')
+            name = 'acoustic-kit/piano'
+
         data = data || {};
         data.volume = data.volume || 1;
         data.speed = data.speed || 1;
@@ -220,7 +223,10 @@ export default class Audio {
         if (Audio._initResolve != null)
             Audio._initResolve();
 
+        Audio.playLoop('8-bit-kick',  0, 0.00, 1);        
+
         // TODO: Remove this test.
+        /*
         Audio.playLoop('8-bit-kick',  0, 0.00, 1);
         Audio.playLoop('8-bit-snare', 0, 0.25, 1);
         // Audio.playLoop('8-bit-kick',  0, 0.50, 1);
@@ -267,6 +273,7 @@ export default class Audio {
         Audio.playLoop('piano', 4, 3.25, 4, {volume: 0.5, speed: 1});
         Audio.playLoop('piano', 3, 3.50, 4, {volume: 0.5, speed: 0.5});
         Audio.playLoop('piano', 2, 3.75, 4, {volume: 0.5, speed: 1});
+        */
 
     }
 
