@@ -4,14 +4,19 @@ require('styles/App.scss');
 import React from 'react';
 import Modul from './Modul';
 
-let yeomanImage = require('../images/yeoman.png');
+let background = require('../images/background.jpg');
 
 class AppComponent extends React.Component {
   render() {
     return (
-      <div className="index">
-        <Modul name="Base"></Modul>
-        <Modul name="Keyboard"></Modul>
+      <div>
+        <header className="header">
+          <img src={background} />
+        </header>
+        <div className="index">
+          <Modul name="Base"></Modul>
+          <Modul name="Keyboard"></Modul>
+        </div>
       </div>
     );
   }

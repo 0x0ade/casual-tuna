@@ -1,7 +1,16 @@
 /* Base Application Styles */
+
+:root {
+  --color-blue: #006AB0;
+  --color-green: #007A42;
+  --color-red: #007A42;
+  --color-background: #2B4565;
+}
+
 body {
   color: #fff;
-  background: #222;
+  background: var(--color-background);
+  padding: 20px;
 }
 
 .index .notice {
@@ -15,4 +24,15 @@ body {
 
 .index {
   display: flex;
+}
+
+.header{
+  width: 100%;
+  height: 100px;
+  display:block;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
