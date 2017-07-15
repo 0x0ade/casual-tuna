@@ -7,20 +7,15 @@ class Controls extends React.Component {
   render() {
     return (
       <div className="controls">
-        <Button>SOLO</Button>
-        <select>
-          {this.props.instruments.map(function(inst, i){
-            return <option key={"instrument" + inst} value={i}>{inst}</option>
-          })}
-        </select>
         <input type="range"/>
+        <Button>SOLO</Button>
       </div>
     );
   }
 }
 
 Controls.defaultProps = {
-  instruments: ["default"]
+
 };
 
 export default Controls;

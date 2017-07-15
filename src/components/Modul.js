@@ -12,9 +12,14 @@ class Modul extends React.Component {
     };
     return (
       <div className="modul" style={style}>
-        <h4>{this.props.name}</h4>
-        <Controls />
+        <select>
+          {this.props.instruments.map(function(inst, i){
+            return <option key={"instrument" + inst} value={i}>{inst}</option>
+          })}
+        </select>
+
         <Keys pitches={5} note={4}/>
+        <Controls />
       </div>
     );
   }
@@ -22,7 +27,8 @@ class Modul extends React.Component {
 
 Modul.defaultProps = {
   name: "Modulname",
-  color: "--color-blue"
+  color: "--color-blue",
+  instruments: ["default"]
 };
 
 export default Modul;
