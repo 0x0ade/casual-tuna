@@ -11,10 +11,19 @@
   --color-faded: rgba(255,255,255,0.5);
 }
 
+html, body{
+  width: 100%;
+  height: 100%;
+  margin:0;
+  padding:0;
+}
+
 body {
   color: #fff;
-  background: var(--color-background);
-  padding: 20px;
+  background-image: url("../images/background.png");
+
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .index .notice {

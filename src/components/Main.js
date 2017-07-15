@@ -16,8 +16,6 @@ import Level4 from '../levels/Level4';
 
 Score.init();
 
-let background = require('../images/background.jpg');
-
 class AppComponent extends React.Component {
   constructor(){
     super();
