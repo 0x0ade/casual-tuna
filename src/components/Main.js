@@ -14,8 +14,8 @@ class AppComponent extends React.Component {
           <img src={background} />
         </header>
         <div className="index">
-          <Modul name="Base" color={"--color-green"}></Modul>
-          <Modul name="Keyboard"></Modul>
+          <Modul instruments={["Bass"]} color={"--color-green"}></Modul>
+          <Modul instruments={["Piano", "Sax"]}></Modul>
         </div>
       </div>
     );
