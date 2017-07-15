@@ -4,6 +4,7 @@ import React from 'react';
 import Keys from './Keys';
 import Controls from './Controls';
 import Audio from '../controllers/Audio';
+import Score from '../controllers/Score';
 
 class Modul extends React.Component {
   constructor(props) {
@@ -16,10 +17,12 @@ class Modul extends React.Component {
   onChangeKey(enabled, note, time, loop) {
     console.log(enabled, `module:${this.props.name}`, note, time, loop);
     Audio.setLoop(enabled, `module:${this.props.name}`, note, time, loop);
+    Score.progress('draw', enabled ? 20 : 10);
   }
 
   onChangeInstrument(value) {
     Audio.setInstrument(this.props.name, value);
+    Score.progress('draw', 20);
   }
 
   onChangeVolume(value) {

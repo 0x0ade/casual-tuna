@@ -41,7 +41,8 @@ class KeyColoumn extends React.Component {
     };
 
     Audio.onBar.push(b => {
-      let isOnBar = b % (this.props.loop || Audio.loopLength) == this.props.time;
+      b = b % (this.props.loop || Audio.loopLength)
+      let isOnBar = this.props.time <= b && b < this.props.time + 0.25;
       if (!isOnBar && this.state.highlighted)
         this.setState(state => {
           state.highlighted = false;

@@ -6,6 +6,8 @@ import Preloader from './Preloader';
 import Modul from './Modul';
 import Score from '../controllers/Score'
 
+Score.init();
+
 let background = require('../images/background.jpg');
 
 class AppComponent extends React.Component {
