@@ -1,0 +1,28 @@
+.icon-slider {
+  position: relative;
+  cursor: pointer;
+
+  .rc-slider-rail {
+    background-color: var(--color-faded);
+    height: 28px;
+  }
+
+  .rc-slider-track {
+    background-color: var(--color-light);
+    height: 28px;
+  }
+
+  .rc-slider-handle {
+    display:none;
+  }
+
+  .icon {
+    height: 28px;
+    position: absolute;
+    left: calc(50% - 14px);
+    top: 5px;
+    pointer-events: none;
+  }
+}
+
+
