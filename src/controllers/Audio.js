@@ -2,12 +2,20 @@ export default class Audio {
     static log(txt) { console.log(`[CASUAL TUNA AUDIO] ${txt}`); }
 
     static context = null
+    static master = null
+    static masterGain = null
+    static masterFilter = null
+
     static bpm = 120
-    static get speed() { return this.bpm / 120; }
-    static time = 0
-    static lastb = 0;
+    static get speed() { return Audio.bpm / 240; }
+
+    static time = -1
+    static rawtime = 0
+    static paused = false
+
+    static lastb = -1
     static get b() {
-        var b = Math.floor(this.time * this.speed * 16.0) / 16.0;
+        var b = Math.floor(Audio.time * 16.0) / 16.0;
         if (b == Audio.lastb)
             return -1;
         Audio.lastb = b;
@@ -19,7 +27,10 @@ export default class Audio {
     static samples = {}
     static samplemap = {}
 
-    static fetching = 0;
+    static loops = []
+    static loopLength = 1
+
+    static fetching = 0
     static fetchSample(url) {
         Audio.fetching++;
         fetch(url)
@@ -36,6 +47,8 @@ export default class Audio {
     static play(name, note, data) {
         data = data || {};
         data.volume = data.volume || 1;
+        data.speed = data.speed || 1;
+        data.detune = data.detune || 0;
 
         if (note != null && note != 0)
             name = `${name}${Audio.samplemap.notes[note - 1]}`;
@@ -49,7 +62,7 @@ export default class Audio {
             if (info.free) {
                 info.free = false;
                 reused = true;
-                Audio.log(`Reusing source #${i}`);
+                // Audio.log(`Reusing source #${i}`);
                 info.source.disconnect();
                 break;
             }
@@ -64,13 +77,15 @@ export default class Audio {
                 source: null,
                 gain: Audio.context.createGain()
             };
-            Audio.log(`New source #${Audio.sources.length}`);
-            info.gain.connect(Audio.context.destination);
+            // Audio.log(`New source #${Audio.sources.length}`);
+            info.gain.connect(Audio.master);
         }
         
         info.gain.gain.value = data.volume;
 
         info.source = Audio.context.createBufferSource();
+        info.source.playbackRate.value = data.speed;
+        info.source.detune.value = data.detune;
         info.source.connect(info.gain);
         
         info.source.buffer = buffer;
@@ -81,15 +96,44 @@ export default class Audio {
             Audio.sources.push(info);
     }
 
+    static playLoop(name, note, position, loopLength, data) {
+        var info = {
+            name: name,
+            note: note,
+            position: position,
+            loopLength: loopLength,
+            data: data,
+            stop: () => Audio.loops.splice(Audio.loops.indexOf(info), 1)
+        };
+        Audio.loops.push(info);
+        return info;
+    }
+
     static inited = false;
     static initFinished = false;
     static init() {
+        if (window.CTAudio != Audio && window.CTAudio !== undefined) {
+            // Old instance still hanging around somewhere - kill it with fire!
+            window.CTAudio.context.close();
+            window.CTAudio.context = null;
+        }
+        window.CTAudio = Audio;
         if (Audio.inited)
             return;
         Audio.inited = true;
 
         Audio.log('[init] Creating AudioContext');
         Audio.context = new AudioContext();
+
+        Audio.masterGain = Audio.context.createGain();
+        Audio.masterGain.connect(Audio.context.destination);
+
+        Audio.masterFilter = Audio.context.createBiquadFilter();
+        Audio.masterFilter.connect(Audio.masterGain);
+
+        // What other nodes should see as "master output".
+        Audio.master = Audio.masterFilter;
+
 
         Audio.log('[init] Filling samples');
         Audio.fetching++;
@@ -120,13 +164,48 @@ export default class Audio {
 
         Audio.log('[init] Hooray!');
 
+        // TODO: Remove this test.
+        Audio.playLoop('8-bit-kick',  0, 0.00, 1);
+        Audio.playLoop('8-bit-snare', 0, 0.25, 1);
+        // Audio.playLoop('8-bit-kick',  0, 0.50, 1);
+        Audio.playLoop('8-bit-kick',  0, 0.50, 1, {volume: 0.7, speed: 4.0});
+        Audio.playLoop('8-bit-kick',  0, 0.625, 1);
+        Audio.playLoop('8-bit-snare', 0, 0.75, 1);
+
+        for (var i = 1; i < 8; i += 2)
+            Audio.playLoop('8-bit-snare', 0, 0.125 * i, 1, {volume: 0.7, speed: 4.0});
+
+        for (var i = 1; i < 16; i += 2)
+            Audio.playLoop('8-bit-snare', 0, 0.0625 * i, 1, {volume: 0.5, speed: 6.0});
+        
+
+        Audio.playLoop('8-bit-bass',  1, 0.00, 2);
+        Audio.playLoop('8-bit-bass',  2, 0.50, 2);
+        Audio.playLoop('8-bit-bass',  3, 1.00, 2);
+        Audio.playLoop('8-bit-bass',  2, 1.50, 2);
+
+        Audio.playLoop('8-bit-lead',  1, 0.00, 4);
+        Audio.playLoop('8-bit-lead',  2, 0.25, 4);
+        Audio.playLoop('8-bit-lead',  3, 0.50, 4);
+        Audio.playLoop('8-bit-lead',  4, 0.75, 4);
+
+        Audio.playLoop('8-bit-lead',  5, 2.00, 4);
+        Audio.playLoop('8-bit-lead',  4, 2.25, 4);
+        Audio.playLoop('8-bit-lead',  3, 2.50, 4);
+        Audio.playLoop('8-bit-lead',  2, 2.75, 4);
+
     }
 
     static lastFetching = -1;
-    static update(rtime) {
+    static update(newtime) {
+        if (Audio.context == null)
+            // If the context == null (has been disposed and nullified), don't continue this update loop.
+            // Instead, let any other possible update loop take over.
+            return;
         window.requestAnimationFrame(Audio.update);
 
-        Audio.time = rtime * 0.001;
+        var oldtime = Audio.rawtime; // Stored temporarily. Audio.rawtime needs to update, but we maybe need its old value later.
+        Audio.rawtime = newtime;
 
         if (Audio.fetching) {
             // Wait until samples fetched completely.
@@ -141,27 +220,25 @@ export default class Audio {
             Audio.initFetched();
         }
 
+        if (Audio.paused)
+            // Audio paused - don't play anything, don't progress time.
+            return;
+        Audio.time += (newtime - oldtime) * 0.001 * Audio.speed;
+
         var b = Audio.b;
         if (b <= 0)
             // Not "on beat."
             return;
 
         // TODO: Any audio management (f.e. custom loops) should end up here.
-        if (b % 0.5 == 0 && b % 2 != 0) {
-            Audio.play('8-bit-kick', null, {volume: 1.0});
-            Audio.play('8-bit-bass', 1, {volume: 1.0});
-        }
 
-        if (b % 1 == 0) {
-            Audio.play('8-bit-snare', null, {volume: 1.0});
-        }
+        Audio.loops.forEach(info => {
+            if (b % (info.loopLength || Audio.loopLength) != info.position)
+                return;
+            Audio.play(info.name, info.note, info.data);
+        });
 
-        if (b % 2 == 0) {
-            Audio.play('8-bit-lead', 5, {volume: 0.7});
-            Audio.play('8-bit-bass', 2, {volume: 1.0});
-        }
+        Audio.masterFilter.frequency.value = 10 + 11015 + Math.sin(b) * 11015;
 
-        if (b % 4 == 1)
-            Audio.play('8-bit-lead', 4, {volume: 0.6});
     }
 }
