@@ -17,7 +17,7 @@ class Preloader extends React.Component {
                 state.finished = true;
                 return state;
             });
-            return new Promise(resolve => setTimeout(resolve, 3000));
+            return new Promise(resolve => setTimeout(resolve, 2000));
         }).then(() => {
             this.setState(state => {
                 state.removed = true;
@@ -28,7 +28,7 @@ class Preloader extends React.Component {
 
     render() {
         if (this.state.removed)
-            return this.props.children;
+            return (<div>{this.props.children}</div>);
 
         if (this.state.finished)
             return (

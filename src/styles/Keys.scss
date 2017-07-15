@@ -29,10 +29,18 @@
 .column.highlighted .key {
   background-color: rgba(255,255,255,0.75);
   animation: highlight-fadeout 0.6s forwards;
+
+  &.enabled:after {
+    animation: highlight-enabled-fadeout 0.7s forwards;
+  }
 }
 
 
 @keyframes highlight-fadeout {
-  0% {background-color: rgba(255,255,255,0.75);}
-  100% {background-color: var(--color-faded);}
+  0% {background-color: rgba(255,255,255,0.6); box-shadow: 0 0 16px rgba(255,255,255,0.8);}
+  100% {background-color: var(--color-faded); box-shadow: 0 0 0 rgba(255,255,255,0);}
+}
+@keyframes highlight-enabled-fadeout {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
 }

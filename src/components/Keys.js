@@ -33,6 +33,8 @@ Keys.defaultProps = {
 export default Keys;
 
 class KeyColoumn extends React.Component {
+  onBar;
+
   constructor(props) {
     super(props);
 
@@ -40,7 +42,7 @@ class KeyColoumn extends React.Component {
       highlighted: false
     };
 
-    Audio.onBar.push(b => {
+    Audio.onBar.push(this.onBar = b => {
       b = b % (this.props.loop || Audio.loopLength)
       let isOnBar = this.props.time <= b && b < this.props.time + 0.25;
       if (!isOnBar && this.state.highlighted)
@@ -52,6 +54,10 @@ class KeyColoumn extends React.Component {
           state.highlighted = true;
         });
     });
+  }
+
+  componentWillUnmount() {
+    Audio.onBar.splice(Audio.onBar.indexOf(this.onBar), 1);
   }
 
   render() {

@@ -15,6 +15,15 @@
             "10-ais"
         ]
     ],
+    "chords": [
+        [
+            "01-des",
+            "02-f",
+            "03-ges",
+            "04-b",
+            "05-c"
+        ]
+    ],
     "instruments": [
         [
             "acoustic-kit/bass",
@@ -32,6 +41,15 @@
             "8-bit/8-bit-lead",
             "dubstep/bass",
             "dubstep/lead"
+        ]
+    ],
+    "chordstruments": [
+        [
+            "acoustic-kit/piano",
+            "acoustic-kit/saxophone",
+            "8-bit/8-bit-bass",
+            "8-bit/8-bit-lead",
+            "dubstep/synthchord"
         ]
     ],
     "samples": [
