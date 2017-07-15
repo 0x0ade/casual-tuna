@@ -26,7 +26,6 @@ class Modul extends React.Component {
   }
 
   onChangeVolume(value) {
-    console.log(value);
     Audio.setVolume(this.props.name, value);
   }
 
