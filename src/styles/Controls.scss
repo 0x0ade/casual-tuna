@@ -1,4 +1,13 @@
 .controls {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+
+  input {
+    width: 50%;
+    margin-right: 10px;
+  }
+
+  .button {
+    width: 50%;
+  }
 }
