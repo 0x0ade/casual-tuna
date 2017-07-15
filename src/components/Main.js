@@ -4,6 +4,8 @@ require('styles/App.scss');
 import React from 'react';
 import Preloader from './Preloader';
 import Modul from './Modul';
+import Levelbar from './Levelbar'
+
 import Audio from '../controllers/Audio'
 import Score from '../controllers/Score'
 
@@ -43,6 +45,7 @@ class AppComponent extends React.Component {
       <Preloader>
         <div className="index">
           {this.props.levels[Math.min(this.state.activeLevel, this.props.levels.length - 1)]}
+          <Levelbar/>
         </div>
       </Preloader>
     );

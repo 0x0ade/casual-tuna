@@ -1,0 +1,18 @@
+.levelbar {
+  border-top: rgba(255, 255, 255, 0.75) solid 1px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  margin: 0 25px 25px 25px;
+  padding: 8px;
+  box-sizing: border-box;
+
+  .scorebar-wrap, .scorebar {
+    border-radius: 5px;
+    width: 10vw;
+    height: 32px;
+    background: red;
+  }
+}

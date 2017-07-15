@@ -55,9 +55,12 @@
     "samples": [
         "acoustic-kit/acoustic-kick",
         "acoustic-kit/acoustic-snare",
+        "acoustic-kit/acoustic-hh",
         "8-bit/8-bit-kick",
         "8-bit/8-bit-snare",
-        "dubstep/dub-kick",        
-        "dubstep/dub-snare"        
+        "8-bit/8-bit-hh",
+        "dubstep/dub-kick",
+        "dubstep/dub-snare",
+        "dubstep/dub-hh"
     ]
 }

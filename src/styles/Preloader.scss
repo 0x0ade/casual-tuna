@@ -15,7 +15,9 @@
         width: 512px;
         height: 512px;
         background: url(../images/logo.png);
-        background-size: cover;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
         animation: preloader-logo 2s infinite ease-in-out;
         &.clicked {
             animation: preloader-logo-clicked 0.5s infinite linear;        
