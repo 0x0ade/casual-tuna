@@ -8,6 +8,7 @@ class Keys extends React.Component {
     let rows = [];
     for (let i = 0; i < this.props.notes; i++) {
       rows.push(<KeyColoumn
+        key={i} // Required by react.
         pitches={this.props.pitches}
         time={i / this.props.notes * this.props.loop}
         loop={this.props.loop}
@@ -64,6 +65,7 @@ class KeyColoumn extends React.Component {
     let rows = [];
     for (let i = 0; i < this.props.pitches; i++) {
       rows.push(<Key
+        key={i} // Required by react.
         module={this.props.module} note={this.props.pitches - i}
         onChange={(enabled, note) => this.props.onChange(enabled, note, this.props.time)}
       />);

@@ -17,6 +17,9 @@
         background: url(../images/logo.png);
         background-size: cover;
         animation: preloader-logo 2s infinite ease-in-out;
+        &.clicked {
+            animation: preloader-logo-clicked 0.5s infinite linear;        
+        }
     }
 
     &.finished {
@@ -43,4 +46,9 @@
 @keyframes preloader-logo-fadeout {
     0% {transform: translate(-50%, -50%) scale(1.0);}
     100% {transform: translate(-50%, -50%) scale(0.9);}
+}
+
+@keyframes preloader-logo-clicked {
+    0% {transform: translate(-50%, -50%) rotate(0deg);}
+    100% {transform: translate(-50%, -50%) rotate(360deg);}
 }
