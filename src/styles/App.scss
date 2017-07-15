@@ -31,6 +31,10 @@ body {
   z-index: 0;
 }
 
+@keyframes fade-in {
+  0%    {opacity: 0}
+  100%  {opacity: 1}
+}
 .level {
   position: absolute;
   top: 0;
@@ -38,12 +42,17 @@ body {
   bottom: 0;
   right: 0;
   padding: 25px;
+  animation: fade-in 1s;
+}
+
+.inactive-level .level{
+  display:none;
 }
 
 .modules {
   display: flex;
   flex-direction: row;
-  justify-content: center;  
+  justify-content: center;
 }
 
 .header{
