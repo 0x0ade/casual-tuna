@@ -42,7 +42,10 @@ class Preloader extends React.Component {
 
         return (
             <div className="preloader">
-                <div id="logo"></div>
+                <div id="logo" onClick={e => {
+                    if (!e.target.className.endsWith(" clicked"))
+                        e.target.className += " clicked";
+                }}></div>
             </div>
         );
     }
