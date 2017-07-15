@@ -1,20 +1,13 @@
 require('styles/Level3.scss');
 
 import React from 'react';
-import Keys from '../components/Keys';
+import Modul from '../components/Modul';
 
 class Level3 extends React.Component {
 
   render() {
     return (
       <div className="modules">
-        <Modul name="Lead" instruments={[
-          // {name: "Piano", id: "acoustic-kit/piano"},
-          {name: "Saxophone", id: "acoustic-kit/saxophone"},
-          {name: "8-Bit Lead", id: "8-bit/8-bit-lead"},
-          {name: "Dubstep Lead", id: "dubstep/lead"}
-        ]}
-        />
         <Modul
           name="Drums" instruments={[
           {name: "Acoustic Drums", id: "acoustic-kit/acoustic:drums"},
