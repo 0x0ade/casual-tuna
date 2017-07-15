@@ -10,7 +10,7 @@ class Controls extends React.Component {
     let icon = require("../images/audio.svg");
     return (
       <div className="controls">
-        <IconSlider icon={icon} onChange={e => this.props.onChangeVolume(e.target.value / 100)}/>
+        <IconSlider icon={icon} onChange={e => this.props.onChangeVolume(e / 100)}/>
         <Button onChange={e => this.props.onChangeSolo(e.target.value)}>SOLO</Button>
       </div>
     );
