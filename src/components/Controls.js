@@ -7,7 +7,7 @@ import 'rc-slider/assets/index.css';
 
 class Controls extends React.Component {
   render() {
-    let icon = require("../images/audio.svg");
+    let icon = require('../images/sound.png');
     return (
       <div className="controls">
         <IconSlider icon={icon} onChange={e => this.props.onChangeVolume(e / 100)}/>

@@ -19,7 +19,7 @@ class IconSlider extends React.Component {
 }
 
 IconSlider.defaultProps = {
-  icon: require("../images/audio.svg")
+  icon: require("../images/sound.png")
 };
 
 export default IconSlider;
