@@ -1,0 +1,11 @@
+.button {
+  background-color: var(--color-light);
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px 0;
+
+  &.enabled {
+    filter: hue-rotate(180deg);
+  }
+}

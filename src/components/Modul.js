@@ -7,7 +7,8 @@ import Controls from './Controls';
 class Modul extends React.Component {
   render() {
     let style = {
-      "--color": this.props.color
+      "--color": "var(" + this.props.color +")",
+      "--color-light":"var("+ this.props.color +"-light)"
     };
     return (
       <div className="modul" style={style}>
@@ -21,7 +22,7 @@ class Modul extends React.Component {
 
 Modul.defaultProps = {
   name: "Modulname",
-  color: "var(--color-blue)"
+  color: "--color-blue"
 };
 
 export default Modul;
