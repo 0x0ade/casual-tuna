@@ -5,6 +5,7 @@ import React from 'react';
 import Preloader from './Preloader';
 import Modul from './Modul';
 import Score from '../controllers/Score'
+import Timeline from './Timeline';
 
 import Level1 from '../levels/Level1';
 import Level2 from '../levels/Level2';
@@ -26,7 +27,7 @@ class AppComponent extends React.Component {
     return (
       <Preloader>
         <header className="header">
-          <img src={background} />
+          <Timeline/>
         </header>
         <div className="index">
           {this.props.levels[this.state.activeLevel]}

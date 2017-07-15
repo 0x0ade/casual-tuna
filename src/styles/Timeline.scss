@@ -1,0 +1,19 @@
+.timeline {
+  display:flex;
+  flex-direction: row;
+  height: 100px;
+
+  .measure {
+    flex-grow: 1;
+    height: 100%;
+    cursor: pointer;
+
+    .line {
+      width: calc(100% - 4px);
+      height: calc(33% - 8px);
+      margin: 4px 2px;
+      background-color: var(--color);
+    }
+  }
+}
+
