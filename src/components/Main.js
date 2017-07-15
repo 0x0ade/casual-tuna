@@ -18,8 +18,17 @@ class AppComponent extends React.Component {
         </header>
         <div className="index">
           <Modul
+            name="Drums" instruments={[
+            {name: "Acoustic Drums", id: "acoustic-kit/acoustic:drums"},
+            {name: "8-Bit Drums", id: "8-bit/8-bit:drums"},
+            {name: "Dubstep Drums", id: "dubstep/dub:drums"}
+            ]}
+            color={"--color-red"}
+          />
+          <Modul
             name="Bass" instruments={[
             {name: "Bass", id: "acoustic-kit/bass"},
+            {name: "Saxophone", id: "acoustic-kit/saxophone"},
             {name: "8-Bit Bass", id: "8-bit/8-bit-bass"},
             {name: "Dubstep Bass", id: "dubstep/bass"}
             ]}

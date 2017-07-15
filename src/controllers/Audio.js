@@ -92,6 +92,39 @@ export default class Audio {
         data.detune = data.detune != null ? data.detune : 0;
         data.target = data.target || Audio.master;
 
+        if (name.endsWith(':drums')) {
+            // TODO: Don't hardcode this?
+            name = name.substr(0, name.length - ':drums'.length)
+            switch (note) {
+                case 1:
+                name = name + "-kick";
+                break;
+
+                case 2:
+                name = name + "-kick";
+                data.volume *= 0.7;
+                data.speed *= 4.0;
+                break;
+
+                case 3:
+                name = name + "-snare";
+                break;
+
+                case 4:
+                name = name + "-snare";
+                data.volume *= 0.7;
+                data.speed *= 4.0;
+                break;
+
+                case 5:
+                name = name + "-snare";
+                data.volume *= 0.5;
+                data.speed *= 6.0;
+                break;
+            }
+            note = 0;
+        }
+
         if (note != null && note != 0)
             name = `${name}${Audio.samplemap.notes[Math.floor((note - 1) / 5)][(note - 1) % 5]}`;
 
