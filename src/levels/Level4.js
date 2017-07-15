@@ -2,11 +2,15 @@ require('styles/Level4.scss');
 
 import React from 'react';
 import Modul from '../components/Modul';
+import Timeline from '../components/Timeline';
 
 class Level4 extends React.Component {
 
   render() {
-    return (
+    return (<div className="level level4">
+      <header className="header">
+        <Timeline/>
+      </header>
       <div className="modules">
         <Modul
           name="Drums" instruments={[
@@ -25,7 +29,7 @@ class Level4 extends React.Component {
           color={"--color-red"}
         />
       </div>
-    );
+    </div>);
   }
 }
 

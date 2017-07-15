@@ -29,11 +29,11 @@ class Level1 extends React.Component {
   }
 
   render() {
-    return (
+    return (<div className="level level1">
       <div className="drum">
         <Keys pitches={1} note={4} values={this.state.values} onChange={this.onChangeKey.bind(this)} ref="keys"/>
       </div>
-    );
+    </div>);
   }
 }
 

@@ -1,8 +1,4 @@
-header {
-  visibility: hidden;
-}
-
-.drum {
+.level1 .drum {
   --color: var(--color-green);
   --color-light: var(--color-green-light);
   width: calc(100% - 100px);

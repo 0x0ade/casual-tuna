@@ -6,7 +6,6 @@ import Preloader from './Preloader';
 import Modul from './Modul';
 import Audio from '../controllers/Audio'
 import Score from '../controllers/Score'
-import Timeline from './Timeline';
 
 import Level1 from '../levels/Level1';
 import Level2 from '../levels/Level2';
@@ -42,9 +41,6 @@ class AppComponent extends React.Component {
   render() {
     return (
       <Preloader>
-        <header className="header">
-          <Timeline/>
-        </header>
         <div className="index">
           {this.props.levels[Math.min(this.state.activeLevel, this.props.levels.length - 1)]}
         </div>

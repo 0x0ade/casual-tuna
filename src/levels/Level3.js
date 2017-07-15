@@ -6,7 +6,7 @@ import Modul from '../components/Modul';
 class Level3 extends React.Component {
 
   render() {
-    return (
+    return (<div className="level level3">
       <div className="modules">
         <Modul
           name="Drums" instruments={[
@@ -25,7 +25,7 @@ class Level3 extends React.Component {
           color={"--color-red"}
         />
       </div>
-    );
+    </div>);
   }
 }
 
