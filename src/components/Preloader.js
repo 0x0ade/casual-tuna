@@ -9,17 +9,36 @@ class Preloader extends React.Component {
         super(props);
 
         this.state = {
-            finished: false
+            finished: false,
+            removed: false
         };
-        Audio.init().then(() => this.setState(state => {
-            state.finished = true;
-            return state;
-        }));
+        Audio.init().then(() => {
+            this.setState(state => {
+                state.finished = true;
+                return state;
+            });
+            return new Promise(resolve => setTimeout(resolve, 3000));
+        }).then(() => {
+            this.setState(state => {
+                state.removed = true;
+                return state;
+            });
+        });
     }
 
     render() {
-        if (this.state.finished)
+        if (this.state.removed)
             return this.props.children;
+
+        if (this.state.finished)
+            return (
+                <div className="preloader-wrapper">
+                    {this.props.children}
+                    <div className="preloader finished">
+                        <div id="logo"></div>
+                    </div>
+                </div>
+            );
 
         return (
             <div className="preloader">

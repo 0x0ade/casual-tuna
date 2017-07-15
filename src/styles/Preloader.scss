@@ -5,14 +5,42 @@
     bottom: 0;
     right: 0;
     z-index: 1000;
+    background: #222;
+
+    & #logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 512px;
+        height: 512px;
+        background: url(../images/logo.png);
+        background-size: cover;
+        animation: preloader-logo 2s infinite ease-in-out;
+    }
+
+    &.finished {
+        animation: preloader-fadeout 0.3s forwards;
+        pointer-events: none;
+
+        & #logo {
+            animation: preloader-logo-fadeout 0.3s forwards;
+        }
+    }
 }
-.preloader #logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 512px;
-    height: 512px;
-    background: url(../images/logo.png);
-    background-size: cover;
+
+@keyframes preloader-logo {
+    0% {transform: translate(-50%, -50%) scale(1.0);}
+    50% {transform: translate(-50%, -50%) scale(0.9);}
+    100% {transform: translate(-50%, -50%) scale(1.0);}
+}
+
+@keyframes preloader-fadeout {
+    0% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+@keyframes preloader-logo-fadeout {
+    0% {transform: translate(-50%, -50%) scale(1.0);}
+    100% {transform: translate(-50%, -50%) scale(0.9);}
 }
