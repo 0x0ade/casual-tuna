@@ -40,6 +40,8 @@ export default class Audio {
     static loops = []
     static loopLength = 1
 
+    static scheduledRefreshes = []
+
     static fetching = 0
     static fetchSample(url) {
         Audio.fetching++;
@@ -209,6 +211,26 @@ export default class Audio {
             Audio.playLoop(name, note, position, loopLength, data);
         else if (info != null && !enabled)
             info.stop();
+
+        if (data != null && data.updateModule != null) {
+            // Dirty dirty horrible hack: Access the targetted module (if any) and "reset" key states.
+            Audio.refreshModule(window.CTModules[info.name.substr('module:'.length)], info);
+            delete data.updateModule;
+        }
+
+        return info;
+    }
+
+    static refreshModule(module, loop) {
+        Audio.log(`Refreshing loop in module ${module.props.name}`);
+        
+        let notes = module.refs.keys.props.notes;
+        module.state.values[loop.position / loop.loopLength * notes][loop.note - 1] = true;
+        module.forceUpdate();
+    }
+
+    static scheduleRefreshModule(loop) {
+        Audio.scheduledRefreshes.push(loop);
     }
 
     static inited = false
@@ -406,6 +428,18 @@ export default class Audio {
         // Any audio management (f.e. custom loops) should end up here.
 
         Audio.onBar.forEach(cb => cb(b, Audio.time));
+
+        for (let i = Audio.scheduledRefreshes.length - 1; i > -1; --i) {
+            let info = Audio.scheduledRefreshes[i];
+            let moduleName = info.name.substr('module:'.length);
+            let module = window.CTModules[moduleName];
+            if (module == null) {
+                Audio.log(`Scheduled refresh for ${moduleName} delayed further. This should only happen once at most.`);
+                continue;
+            }
+            Audio.refreshModule(module, info);
+            Audio.scheduledRefreshes.splice(i, 1);
+        }
 
         Audio.loops.forEach(info => {
             if (b % (info.loopLength || Audio.loopLength) != info.position)

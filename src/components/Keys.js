@@ -4,21 +4,26 @@ import React from 'react';
 import Audio from '../controllers/Audio';
 
 class Keys extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
-    let rows = [];
+    let columns = [];
     for (let i = 0; i < this.props.notes; i++) {
-      rows.push(<KeyColoumn
+      columns.push(<KeyColoumn
         key={i} // Required by react.
         pitches={this.props.pitches}
         time={i / this.props.notes * this.props.loop}
         loop={this.props.loop}
+        values={this.props.values[i]}
         onChange={(enabled, note, time) => this.props.onChange(enabled, note, time, this.props.loop)}
       />);
     }
 
     return (
       <div className="pitches">
-        {rows}
+        {columns}
       </div>
     );
   }
@@ -28,7 +33,12 @@ Keys.defaultProps = {
   onChange: (enabled, note, time, loop) => {},
   pitches: 5,
   notes: 4,
-  loop: 1
+  loop: 1,
+  values: [
+    [false, false, false, false, false],
+    [false, false, false, false, false],
+    [false, false, false, false, false],
+    [false, false, false, false, false]]
 };
 
 export default Keys;
@@ -67,6 +77,7 @@ class KeyColoumn extends React.Component {
       rows.push(<Key
         key={i} // Required by react.
         module={this.props.module} note={this.props.pitches - i}
+        enabled={this.props.values[this.props.pitches - i - 1]}
         onChange={(enabled, note) => this.props.onChange(enabled, note, this.props.time)}
       />);
     }
@@ -90,7 +101,8 @@ KeyColoumn.defaultProps = {
   onChange: (enabled, note, time) => {},
   pitches: 5,
   time: 0,
-  loop: 1
+  loop: 1,
+  values: [false, false, false, false, false]
 }
 
 class Key extends React.Component {
@@ -98,31 +110,22 @@ class Key extends React.Component {
       super(props);
 
       this.state = {
-        enabled: false,
         highlighted: false
       }
     }
 
     enable() {
-      this.setState(state => {
-        state.enabled = true;
-        this.props.onChange(true, this.props.note);
-        return state;
-      });
+      this.props.onChange(true, this.props.note);
     }
 
     disable() {
-      this.setState(state => {
-        state.enabled = false;
-        this.props.onChange(false, this.props.note);
-        return state;
-      });
+      this.props.onChange(false, this.props.note);
     }
 
     render() {
-      if (this.state.enabled)
+      if (this.props.enabled)
         return (<div className="key enabled" onClick={this.disable.bind(this)}></div>)
-      if (this.state.highlighted)
+      if (this.props.highlighted)
         return (<div className="key highlighted" onClick={this.enable.bind(this)}></div>)
       return (<div className="key" onClick={this.enable.bind(this)}></div>)      
     }
@@ -130,5 +133,6 @@ class Key extends React.Component {
 
 Key.defaultProps = {
   onChange: (enabled, note) => {},
-  note: 1
+  note: 1,
+  enabled: false
 }
