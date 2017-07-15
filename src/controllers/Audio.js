@@ -156,7 +156,7 @@ export default class Audio {
             Audio.masterConvolverBypass.connect(Audio.masterFilter);
             
             Audio.masterConvolver = Audio.context.createConvolver();
-            Audio.masterConvolver.connect(Audio.masterConvolverBypass);
+            Audio.masterConvolver.connect(Audio.masterFilter);
 
             Audio.masterConvolverGain = Audio.context.createGain();
             Audio.masterConvolverGain.connect(Audio.masterConvolver);
@@ -215,7 +215,7 @@ export default class Audio {
 
         Audio.log('[init] Hooray!');
 
-        Audio.masterConvolver.buffer = Audio.irs["halls/keno-2"];
+        Audio.masterConvolver.buffer = Audio.irs['halls/keno-2'];
 
         if (Audio._initResolve != null)
             Audio._initResolve();
@@ -233,7 +233,6 @@ export default class Audio {
 
         for (let i = 1; i < 16; i += 2)
             Audio.playLoop('8-bit-snare', 0, 0.0625 * i, 1, {volume: 0.5, speed: 6.0});
-
         Audio.playLoop('8-bit-bass', 1, 0.00, 2);
         Audio.playLoop('8-bit-bass', 2, 0.50, 2);
         Audio.playLoop('8-bit-bass', 3, 1.00, 2);
