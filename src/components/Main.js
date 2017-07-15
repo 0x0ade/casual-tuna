@@ -7,21 +7,30 @@ import Preloader from './Preloader';
 
 import Modul from './Modul';
 
+let background = require('../images/background.jpg');
+
 class AppComponent extends React.Component {
   render() {
     return (
       <Preloader>
+        <header className="header">
+          <img src={background} />
+        </header>
         <div className="index">
-          <Modul name="Bass" instruments={[
-            ["Bass", "acoustic-kit/bass"],
-            ["8-Bit Bass", "8-bit/8-bit-bass"],
-            ["Dubstep Bass", "dubstep/bass"]
-          ]}/>
+          <Modul
+            instruments={[
+            {name: "Bass", id: "acoustic-kit/bass"},
+            {name: "8-Bit Bass", id: "8-bit/8-bit-bass"},
+            {name: "Dubstep Bass", id: "dubstep/bass"}
+            ]}
+            color={"--color-green"}
+          />
           <Modul name="Keyboard" instruments={[
-            ["Piano", "acoustic-kit/piano"],
-            ["8-Bit Lead", "8-bit/8-bit-lead"],
-            ["Dubstep Lead", "dubstep/lead"]
-          ]}/>
+            {name: "Piano", id: "acoustic-kit/piano"},
+            {name: "8-Bit Lead", id: "8-bit/8-bit-lead"},
+            {name: "Dubstep Lead", id: "dubstep/lead"}
+            ]}
+          />
         </div>
       </Preloader>
     );

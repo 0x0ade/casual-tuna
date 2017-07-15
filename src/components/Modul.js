@@ -10,9 +10,7 @@ class Modul extends React.Component {
     super(props);
 
     Audio.initModule(this.props.name);
-    Audio.setInstrument(this.props.name, this.props.instruments[0][1])
-    //state.loop = Audio.playLoop(`module:${this.props.module}`, this.props.note, this.props.time, this.props.loop);
-    //state.loop.stop();
+    Audio.setInstrument(this.props.name, this.props.instruments[0].id);
   }
 
   onChangeKey(enabled, note, time, loop) {
@@ -21,11 +19,19 @@ class Modul extends React.Component {
   }
 
   render() {
+    let style = {
+      "--color": "var(" + this.props.color +")",
+      "--color-light":"var("+ this.props.color +"-light)"
+    };
     return (
-      <div className="modul">
-        <h4>{this.props.name}</h4>
-        <Controls instruments={this.props.instruments} />
+      <div className="modul" style={style}>
+        <select>
+          {this.props.instruments.map(function(inst) {
+            return <option key={"instrument" + inst.id} value={inst.id}>{inst.name}</option>
+          })}
+        </select>
         <Keys pitches={5} note={4} onChange={this.onChangeKey.bind(this)}/>
+        <Controls />
       </div>
     );
   }
@@ -33,7 +39,8 @@ class Modul extends React.Component {
 
 Modul.defaultProps = {
   name: "Modulname",
-  instruments: [["default", "default"]]
+  instruments: [{name: "Default", id: "default"}],
+  color: "--color-blue"
 };
 
 export default Modul;
