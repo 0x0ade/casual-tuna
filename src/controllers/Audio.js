@@ -3,6 +3,7 @@ export default class Audio {
 
     static context = null
     static master = null
+    static masterCompressor = null
     static masterGain = null
     static masterFilter = null
     static masterConvolverBypass = null
@@ -90,7 +91,6 @@ export default class Audio {
         data.volume = data.volume != null ? data.volume : 1;
         data.speed = data.speed != null ? data.speed : 1;
         data.detune = data.detune != null ? data.detune : 0;
-        data.target = data.target || Audio.master;
 
         if (name.endsWith(':drums')) {
             // TODO: Don't hardcode this?
@@ -123,7 +123,10 @@ export default class Audio {
                 break;
             }
             note = 0;
+            data.target = data.target || Audio.masterConvolverBypass;
         }
+
+        data.target = data.target || Audio.master;
 
         if (note != null && note != 0)
             name = `${name}${Audio.samplemap.notes[Math.floor((note - 1) / 5)][(note - 1) % 5]}`;
@@ -232,8 +235,11 @@ export default class Audio {
             Audio.log('[init] Creating AudioContext');
             Audio.context = new AudioContext();
 
+            Audio.masterCompressor = Audio.context.createDynamicsCompressor();
+            Audio.masterCompressor.connect(Audio.context.destination);
+
             Audio.masterGain = Audio.context.createGain();
-            Audio.masterGain.connect(Audio.context.destination);
+            Audio.masterGain.connect(Audio.masterCompressor);
 
             Audio.masterFilter = Audio.context.createBiquadFilter();
             Audio.masterFilter.frequency.value = Audio.context.sampleRate * 0.5;
