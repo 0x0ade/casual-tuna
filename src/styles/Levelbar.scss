@@ -4,10 +4,14 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 48px;
-  margin: 0 25px 25px 25px;
-  padding: 8px;
+  height: 72px;
+  margin: 0 25px;
+  padding: 8px 8px 33px 8px;
   box-sizing: border-box;
+  background-image: url("../images/background.png");
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
 
   .scorebar-wrap, .scorebar {
     position: relative;

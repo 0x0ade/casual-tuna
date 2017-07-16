@@ -45,6 +45,9 @@ class AppComponent extends React.Component {
       <Preloader>
         <div className="index">
           {
+            // Great idea, but unfortunately breaks preserving the pattern during level up.
+            // That's because right now, modules register themselves as the current one on construction.
+            /*
             this.props.levels.map((level, i) => {
               if (i != activeLevel) {
                 return <div key={i} className="inactive-level">{level}</div>;
@@ -52,6 +55,8 @@ class AppComponent extends React.Component {
                 return <div key={i}>{level}</div>;
               }
             })
+            */
+            this.props.levels[activeLevel]
           }
           <Levelbar/>
         </div>
