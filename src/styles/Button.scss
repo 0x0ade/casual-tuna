@@ -1,12 +1,31 @@
 .button {
+  transition: background-color 0.2s, box-shadow 0.2s;
   background-color: var(--color-light);
   color: white;
   border-radius: 5px;
+  border: none;
   padding: 5px;
   margin: 5px 0;
   text-align: center;
+  cursor: pointer;
+  box-shadow: none;
+
+  &:active {
+    box-shadow: 0 0 16px var(--color-light);    
+  }
+  &:hover {
+    box-shadow: 0 0 8px var(--color-light);
+  }
 
   &.enabled {
-    filter: hue-rotate(180deg);
+    box-shadow: 0 0 0 transparent, 0 5px 12px rgba(0, 0, 0, 0.5) inset, 0 -3px 8px rgba(0, 0, 0, 0.3) inset;
+    &:hover {
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2), 0 5px 12px rgba(0, 0, 0, 0.5) inset, 0 -3px 8px rgba(0, 0, 0, 0.3) inset;
+    }
   }
+
+  &:focus {
+    outline: none;
+  }
+
 }

@@ -1,7 +1,7 @@
 require('styles/Controls.scss');
 
 import React from 'react';
-import Button from './Button';
+import ToggleButton from './ToggleButton';
 import IconSlider from './Slider';
 import 'rc-slider/assets/index.css';
 
@@ -17,7 +17,7 @@ class Controls extends React.Component {
     return (
       <div className="controls">
         <IconSlider icon={icon} onChange={e => this.props.onChangeVolume(e / 100)}/>
-        <Button onChange={e => this.props.onChangeSolo(e.target.value)}>SOLO</Button>
+        <ToggleButton onChange={e => this.props.onChangeSolo(e)}>SOLO</ToggleButton>
       </div>
     );
   }

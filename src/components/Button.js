@@ -7,15 +7,16 @@ import Controls from './Controls';
 class Button extends React.Component {
   render() {
     return (
-      <div className="button">
+      <button className="button" onClick={this.props.onClick} style={this.props.style}>
         {this.props.children}
-      </div>
+      </button>
     );
   }
 }
 
 Button.defaultProps = {
-  active: false
+  enabled: false,
+  onClick: () => {}
 };
 
 export default Button;

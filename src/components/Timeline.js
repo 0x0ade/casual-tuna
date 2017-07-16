@@ -2,6 +2,8 @@ require('styles/Timeline.scss');
 
 import React from 'react';
 import Audio from '../controllers/Audio';
+import Button from './Button'
+import ToggleButton from './ToggleButton'
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -70,7 +72,12 @@ class Timeline extends React.Component {
     }
     return (
       <div className="timeline">
-        {measures}
+        <div className="measures">
+          {measures}
+        </div>
+        <div className="controls">
+          <ToggleButton onChange={e => {}} style={{"--color-light": "rgba(0, 0, 0, 0.5)", "width": "32px"}}>PLAY</ToggleButton>
+        </div>
       </div>
     );
   }

@@ -16,7 +16,7 @@ export default class Audio {
     static time = -1
     static rawtime = 0
     static paused = false
-    static timelinePaused = false
+    static timelinePaused = true
 
     static lastb = -1
     static bOffset = 0
@@ -425,18 +425,20 @@ export default class Audio {
         
         // Any audio management (f.e. custom loops) should end up here.
 
-        let maxLength = Audio.loopLength;
-        Audio.loops.forEach(info => {
-            if (maxLength < info.loopLength)
-                maxLength = info.loopLength
-        });
-        if (b >= maxLength) {
-            Audio.setTimeline(Audio.currentTimeline + 1);
-            Audio.bOffset -= b;
-            Audio.lastb = -1;
-            b = Audio.__b;
-            Audio._b = b;
-            Audio.b = b;
+        if (!Audio.timelinePaused) {
+            let maxLength = Audio.loopLength;
+            Audio.loops.forEach(info => {
+                if (maxLength < info.loopLength)
+                    maxLength = info.loopLength
+            });
+            if (b >= maxLength) {
+                Audio.setTimeline(Audio.currentTimeline + 1);
+                Audio.bOffset -= b;
+                Audio.lastb = -1;
+                b = Audio.__b;
+                Audio._b = b;
+                Audio.b = b;
+            }
         }
 
         Audio.onBar.forEach(cb => cb(b, Audio.time));

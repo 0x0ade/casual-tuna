@@ -1,32 +1,39 @@
 .timeline {
-  display:flex;
-  flex-direction: row;
-  height: 100px;
   padding: 8px;
-  box-sizing: border-box;
-  
+  margin-bottom: 6px; 
 
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.3);
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.8) inset, 0 -3px 8px rgba(0, 0, 0, 0.3) inset;
 
-  .measure {
-    flex-grow: 1;
-    height: 100%;
-    cursor: pointer;
+  .measures {
+    height: 100px;
+    display: flex;
+    flex-direction: row;
 
-    .line {
-      transition: box-shadow 0.2s;
-      width: calc(100% - 4px);
-      height: calc(33% - 8px);
-      margin: 4px 2px;
-      background-color: var(--color);
-      box-shadow: none;
-    }
-
-    &.enabled .line {
-      box-shadow: 0 0 16px var(--color);
+    .measure {
+      flex-grow: 1;
+      height: 100%;
+      cursor: pointer;
+  
+      .line {
+        transition: box-shadow 0.2s;
+        width: calc(100% - 4px);
+        height: calc(33% - 8px);
+        margin: 4px 2px;
+        background-color: var(--color);
+        box-shadow: none;
+      }
+  
+      &.enabled .line {
+        box-shadow: 0 0 16px var(--color);
+      }
     }
   }
+
+  .controls {
+    
+  }
+  
 }
 
