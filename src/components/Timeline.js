@@ -27,27 +27,33 @@ class Timeline extends React.Component {
       selected: i
     }));
 
-    Audio.onUpdateLoop.push(loops => {
-      var values = [false, false, false];
-      loops.forEach(info => {
-        switch (info.name.substr('module:'.length)) {
-          case 'Drums':
-          values[0] = true;
-          break;
+    this.onUpdateLoop = this.onUpdateLoop.bind(this);
+    Audio.onUpdateLoop.push(this.onUpdateLoop);
+  }
 
-          case 'Bass':
-          values[1] = true;
-          break;
+  componentWillUnmount() {
+    Audio.onUpdateLoop.splice(Audio.onUpdateLoop.indexOf(this.onUpdateLoop), 1);
+  }
 
-          case 'Keyboard':
-          values[2] = true;
-          break;
-        }
-      });
-      this.state.measures[Audio.currentTimeline] = values;
-      this.forceUpdate();
+  onUpdateLoop = (loops) => {
+    var values = [false, false, false];
+    loops.forEach(info => {
+      switch (info.name.substr('module:'.length)) {
+        case 'Drums':
+        values[0] = true;
+        break;
+
+        case 'Bass':
+        values[1] = true;
+        break;
+
+        case 'Keyboard':
+        values[2] = true;
+        break;
+      }
     });
-
+    this.state.measures[Audio.currentTimeline] = values;
+    this.forceUpdate();
   }
 
   onSelect(i) {

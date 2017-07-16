@@ -16,16 +16,20 @@ export default class Audio {
     static time = -1
     static rawtime = 0
     static paused = false
+    static timelinePaused = false
 
     static lastb = -1
-    static get b() {
+    static bOffset = 0
+    static get __b() {
         let b = Math.floor(Audio.time * 16.0) / 16.0;
         if (b == Audio.lastb)
             return -1;
         Audio.lastb = b;
-        return b;
+        return b + Audio.bOffset;
     }
-
+    static _b = 0
+    static b = 0
+    
     static onBar = []
 
     static sources = []
@@ -84,6 +88,7 @@ export default class Audio {
     }
 
     static setTimeline(i) {
+        i %= Audio.timeline.length;
         Audio.log(`Setting timeline to #${i}`); 
         Audio.timeline[Audio.currentTimeline] = Audio.loops;
         Audio.loops = Audio.timeline[i];
@@ -411,12 +416,28 @@ export default class Audio {
             return;
         Audio.time += (newtime - oldtime) * 0.001 * Audio.speed;
 
-        let b = Audio.b;
+        let b = Audio.__b;
+        Audio._b = b;
         if (b <= 0)
             // Not "on beat."
             return;
-
+        Audio.b = b;
+        
         // Any audio management (f.e. custom loops) should end up here.
+
+        let maxLength = Audio.loopLength;
+        Audio.loops.forEach(info => {
+            if (maxLength < info.loopLength)
+                maxLength = info.loopLength
+        });
+        if (b >= maxLength) {
+            Audio.setTimeline(Audio.currentTimeline + 1);
+            Audio.bOffset -= b;
+            Audio.lastb = -1;
+            b = Audio.__b;
+            Audio._b = b;
+            Audio.b = b;
+        }
 
         Audio.onBar.forEach(cb => cb(b, Audio.time));
 

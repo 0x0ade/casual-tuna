@@ -15,7 +15,7 @@ class Button extends React.Component {
 }
 
 Button.defaultProps = {
-  active: false,
+  active: false
 };
 
 export default Button;
