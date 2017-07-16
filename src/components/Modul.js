@@ -12,12 +12,17 @@ class Modul extends React.Component {
   constructor(props) {
     super(props);
 
+    let columns = [];
+    for (let i = 0; i < this.props.notes; i++) {
+      let column = [];
+      columns.push(column);
+        for (let ii = 0; ii < this.props.pitches; ii++) {
+            column.push(false);
+        }
+    }
+
     this.state = {
-      values: [
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false]],
+      values: columns,
       solo: false
     };
 
