@@ -275,7 +275,6 @@ export default class Audio {
             if (module.refs.keys.props == null)
                 return;
 
-            let notes = module.refs.keys.props.notes;
             for (let i = 0; i < module.state.values.length; i++) {
                 let values = module.state.values[i];
                 for (let ii = 0; ii < values.length; ii++) {

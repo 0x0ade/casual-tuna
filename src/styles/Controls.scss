@@ -6,15 +6,14 @@
 
   input {
     width: 50%;
-    margin-right: 10px;
   }
 
   .button {
-    width: calc(50% - 10px);
+    width: calc(25% - 10px);
+    margin-left: 10px;
   }
 
   .icon-slider {
     width: calc(50% - 10px);
-    margin-right: 10px;
   }
 }

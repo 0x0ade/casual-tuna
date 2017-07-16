@@ -27,10 +27,11 @@ class Modul extends React.Component {
       Audio.setInstrument(this.props.name, this.props.instruments[0].id);
     } else {
       window.CTModules[this.props.name] = this;
+      let name = `module:${this.props.name}`;
       Audio.loops.forEach(info => {
-        if (info.name == `module:${this.props.name}`)
+        if (info.name == name)
           Audio.scheduleRefreshModule(info);
-      }, this);
+      });
     }
   }
 
@@ -60,6 +61,21 @@ class Modul extends React.Component {
       Audio.solo = null;
   }
 
+  onClear() {
+    let name = `module:${this.props.name}`;
+    Audio.loops.forEach(info => {
+      if (info.name == name)
+        Audio.stopLoop(info);
+    });
+    for (let i = 0; i < this.state.values.length; i++) {
+        let values = this.state.values[i];
+        for (let ii = 0; ii < values.length; ii++) {
+            values[ii] = false;
+        }
+    }
+    this.forceUpdate();
+  }
+
   render() {
     let style = {
       "--color": "var(" + this.props.color +")",
@@ -73,7 +89,12 @@ class Modul extends React.Component {
           })}
         </select>
         <Keys pitches={this.props.pitches} note={this.props.note} values={this.state.values} onChange={this.onChangeKey.bind(this)} ref="keys"/>
-        <Controls onChangeVolume={this.onChangeVolume.bind(this)} onChangeSolo={this.onChangeSolo.bind(this)} solo={this.state.solo}/>
+        <Controls
+          onChangeVolume={this.onChangeVolume.bind(this)}
+          onChangeSolo={this.onChangeSolo.bind(this)}
+          solo={this.state.solo}
+          onClear={this.onClear.bind(this)}
+        />
       </div>
     );
   }
