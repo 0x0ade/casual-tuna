@@ -23,15 +23,19 @@ class ToggleButton extends React.Component {
 
   render() {
     return (
-      <button className={"button" + (this.state.enabled ? " enabled" : "") + " " + this.props.className} style={this.props.style} onClick={this.toggle.bind(this)}>
-        {this.props.children}
-      </button>
+      <button
+      className={"button" + ((this.props.externalState ? this.props.enabled : this.state.enabled) ? " enabled" : "") + " " +
+        this.props.className}
+        style={this.props.style}
+        onClick={this.toggle.bind(this)}
+        >{this.props.children}</button>
     );
   }
 }
 
 ToggleButton.defaultProps = {
   enabled: false,
+  externalState: false,
   onChange: (enabled) => {}
 };
 

@@ -17,7 +17,8 @@ class Modul extends React.Component {
         [false, false, false, false, false],
         [false, false, false, false, false],
         [false, false, false, false, false],
-        [false, false, false, false, false]]
+        [false, false, false, false, false]],
+      solo: false
     };
 
     if (window.CTModules[this.props.name] == null) {
@@ -52,6 +53,13 @@ class Modul extends React.Component {
     Audio.setVolume(this.props.name, value);
   }
 
+  onChangeSolo(value) {
+    if (value)
+      Audio.solo = `module:${this.props.name}`;
+    else
+      Audio.solo = null;
+  }
+
   render() {
     let style = {
       "--color": "var(" + this.props.color +")",
@@ -65,7 +73,7 @@ class Modul extends React.Component {
           })}
         </select>
         <Keys pitches={this.props.pitches} note={this.props.note} values={this.state.values} onChange={this.onChangeKey.bind(this)} ref="keys"/>
-        <Controls onChangeVolume={this.onChangeVolume.bind(this)}/>
+        <Controls onChangeVolume={this.onChangeVolume.bind(this)} onChangeSolo={this.onChangeSolo.bind(this)} solo={this.state.solo}/>
       </div>
     );
   }

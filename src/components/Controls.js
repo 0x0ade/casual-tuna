@@ -17,7 +17,7 @@ class Controls extends React.Component {
     return (
       <div className="controls">
         <IconSlider icon={icon} onChange={e => this.props.onChangeVolume(e / 100)}/>
-        <ToggleButton onChange={e => this.props.onChangeSolo(e)}>SOLO</ToggleButton>
+        <ToggleButton onChange={e => this.props.onChangeSolo(e)} enabled={this.props.solo} externalState={true}>SOLO</ToggleButton>
       </div>
     );
   }
@@ -25,7 +25,8 @@ class Controls extends React.Component {
 
 Controls.defaultProps = {
   onChangeVolume: value => {},
-  onChangeSolo: value => {}
+  onChangeSolo: value => {},
+  solo: false
 };
 
 export default Controls;

@@ -51,6 +51,21 @@ export default class Audio {
 
     static onSetTimeline = []
     static onUpdateLoop = []
+
+    static _solo = null
+    static get solo() {return Audio._solo;}
+    static set solo(value) {
+        Audio._solo = value;
+        let moduleSolo = value;
+        if (moduleSolo != null && moduleSolo.startsWith('module:'))
+            moduleSolo = moduleSolo.substr('module:'.length);
+        for (let key in CTModules) {
+            let module = CTModules[key];
+            module.setState({
+                solo: module.props.name == moduleSolo 
+            });
+        };
+    }
     
     static fetching = 0
     static fetchSample(url) {
@@ -100,6 +115,9 @@ export default class Audio {
     static play(name, note, data) {
         if (name === 'default')
             name = 'acoustic-kit/piano'
+
+        if (Audio.solo != null && Audio.solo != name)
+            return;
 
         data = data || {};
 
@@ -248,6 +266,9 @@ export default class Audio {
     static forceRefresh() {
         Audio.log('Forcibly refreshing every module');
         
+        let moduleSolo = Audio.solo;
+        if (moduleSolo != null && moduleSolo.startsWith('module:'))
+            moduleSolo = moduleSolo.substr('module:');
         for (let key in CTModules) {
             let module = CTModules[key];
 
@@ -261,6 +282,8 @@ export default class Audio {
                     values[ii] = false;
                 }
             }
+
+            module.state.solo = module.props.name == moduleSolo;
 
             module.forceUpdate();
         };
