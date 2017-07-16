@@ -2,8 +2,9 @@ require('styles/Timeline.scss');
 
 import React from 'react';
 import Audio from '../controllers/Audio';
-import Button from './Button'
-import ToggleButton from './ToggleButton'
+import Button from './Button';
+import ToggleButton from './ToggleButton';
+import IconSlider from './Slider';
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -72,6 +73,10 @@ class Timeline extends React.Component {
     Audio.masterGain.gain.value = e ? 0 : 1;
   }
 
+  onChangeSpeed(v) {
+    Audio.bpm = 100 + 4 * v;
+  }
+
   render() {
     let buttonStyle = {"--color-light": "rgba(255, 255, 255, 0.5)", "width": "32px"};
     let measures = [];
@@ -92,11 +97,15 @@ class Timeline extends React.Component {
             style={buttonStyle}
             onChange={this.onChangePlay.bind(this)}
             ><img alt="play / pause timeline" src={require("../images/play.png")}/></ToggleButton>
-            <ToggleButton
-              className="mini"
-              style={buttonStyle}
-              onChange={this.onChangeMute.bind(this)}
-              ><img alt="mute" src={require("../images/mute.png")}/></ToggleButton>
+          <ToggleButton
+            className="mini"
+            style={buttonStyle}
+            onChange={this.onChangeMute.bind(this)}
+            ><img alt="mute" src={require("../images/mute.png")}/></ToggleButton>
+          <IconSlider
+            icon={require("../images/tempo.png")}
+            onChange={this.onChangeSpeed.bind(this)}
+          />
         </div>
       </div>
     );
