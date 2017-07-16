@@ -68,7 +68,12 @@ class Timeline extends React.Component {
     Audio.timelinePaused = !e;
   }
 
+  onChangeMute(e) {
+    Audio.masterGain.gain.value = e ? 0 : 1;
+  }
+
   render() {
+    let buttonStyle = {"--color-light": "rgba(255, 255, 255, 0.5)", "width": "32px"};
     let measures = [];
     for (var i = 0; i < this.state.measures.length; i++){
       if (i == this.state.selected)
@@ -83,10 +88,15 @@ class Timeline extends React.Component {
         </div>
         <div className="controls">
           <ToggleButton
-            className="mini" onChange={this.onChangePlay.bind(this)}
-            style={{"--color-light": "rgba(255, 255, 255, 0.5)", "width": "32px"}}
-            onChange={this.onChangePlay.bind(this) }
-            ><img alt="play / pause" src={require("../images/play.png")}/></ToggleButton>
+            className="mini"
+            style={buttonStyle}
+            onChange={this.onChangePlay.bind(this)}
+            ><img alt="play / pause timeline" src={require("../images/play.png")}/></ToggleButton>
+            <ToggleButton
+              className="mini"
+              style={buttonStyle}
+              onChange={this.onChangeMute.bind(this)}
+              ><img alt="mute" src={require("../images/mute.png")}/></ToggleButton>
         </div>
       </div>
     );
