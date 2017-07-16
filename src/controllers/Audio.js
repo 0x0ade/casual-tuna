@@ -15,7 +15,7 @@ export default class Audio {
 
     static time = -1
     static rawtime = 0
-    static paused = false
+    static paused = true
     static timelinePaused = true
 
     static lastb = -1
@@ -65,6 +65,18 @@ export default class Audio {
                 solo: module.props.name == moduleSolo 
             });
         };
+    }
+
+    static load() {
+        let dataLoops = localStorage.getItem('Loops');
+        if (dataLoops == null)
+            return;
+        Audio.loops = JSON.parse(dataLoops);
+        Audio.forceRefresh();
+    }
+
+    static save() {
+        localStorage.setItem('Loops', JSON.stringify(Audio.loops));
     }
     
     static fetching = 0
@@ -292,6 +304,15 @@ export default class Audio {
             let module = window.CTModules[moduleName];
             Audio.refreshModule(module, info);
         });
+
+        let currentTimeline = Audio.currentTimeline;
+        for (let i = 0; i < Audio.timeline.length; i++) {
+            Audio.currentTimeline = i;
+            Audio.loops = Audio.timeline[i];
+            Audio.onUpdateLoop.forEach(f => f(Audio.loops));
+        }
+        Audio.currentTimeline = currentTimeline;
+        Audio.loops = Audio.timeline[currentTimeline];
     }
 
     static scheduleRefreshModule(loop) {
@@ -448,7 +469,7 @@ export default class Audio {
         // Any audio management (f.e. custom loops) should end up here.
 
         if (!Audio.timelinePaused) {
-            let maxLength = Audio.loopLength;
+            let maxLength = 0;
             Audio.loops.forEach(info => {
                 if (maxLength < info.loopLength)
                     maxLength = info.loopLength

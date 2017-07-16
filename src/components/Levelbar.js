@@ -29,6 +29,7 @@ class Levelbar extends React.Component {
           <div className="scorebar" style={{"width": `calc(${15 * this.state.score / this.state.scoreMax}vw - 8px)`}}></div>
         </div>
         <span className="score">LVL {this.state.level}</span>
+        <img className="logo-footer" alt="logo" src={require("../images/logo.png")}/>
       </div>
     );
   }

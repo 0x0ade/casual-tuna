@@ -89,7 +89,7 @@ class Modul extends React.Component {
             return <option key={"instrument" + inst.id} value={inst.id}>{inst.name}</option>
           })}
         </select>
-        <Keys pitches={this.props.pitches} note={this.props.note} values={this.state.values} onChange={this.onChangeKey.bind(this)} ref="keys"/>
+        <Keys pitches={this.props.pitches} notes={this.props.notes} values={this.state.values} onChange={this.onChangeKey.bind(this)} ref="keys"/>
         <Controls
           onChangeVolume={this.onChangeVolume.bind(this)}
           onChangeSolo={this.onChangeSolo.bind(this)}
@@ -106,7 +106,7 @@ Modul.defaultProps = {
   instruments: [{name: "Default", id: "default"}],
   color: "--color-blue",
   pitches: 5,
-  note: 4
+  notes: 4
 };
 
 export default Modul;

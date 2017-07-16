@@ -11,9 +11,15 @@
   }
 }
 
+.modul:nth-child(1) .key {
+  height: 36px;
+}
+
 .pitches {
   display: flex;
   flex-direction: row;
+  margin: 0 auto;
+  overflow: scroll;
 }
 .column {
   display: flex;

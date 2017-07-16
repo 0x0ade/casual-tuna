@@ -20,6 +20,7 @@ class Level5 extends React.Component {
             {name: "Dubstep Drums", id: "dubstep/dub:drums"}
           ]}
           pitches={3}
+          notes={12}
           color={"--color-green"}
         />
         <Modul
@@ -29,6 +30,7 @@ class Level5 extends React.Component {
           {name: "Dubstep Bass", id: "dubstep/bass"},
           {name: "808", id: "hiphop/808"}
         ]}
+          notes={12}
           color={"--color-red"}
         />
         <Modul name="Keyboard" instruments={[
@@ -39,6 +41,7 @@ class Level5 extends React.Component {
           {name: "Koto", id: "hiphop/koto"},
           {name: "Ukulele", id: "other/ukulele"},
           ]}
+          notes={12}
         />
       </div>
     </div>);

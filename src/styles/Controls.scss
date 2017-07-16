@@ -9,11 +9,12 @@
   }
 
   .button {
-    width: calc(25% - 10px);
+    width: calc(15% - 10px);
+    min-width: 64px;
     margin-left: 10px;
   }
 
   .icon-slider {
-    width: calc(50% - 10px);
+    width: calc(70% - 10px);
   }
 }
