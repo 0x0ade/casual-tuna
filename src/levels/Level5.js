@@ -26,7 +26,8 @@ class Level5 extends React.Component {
           name="Bass" instruments={[
           {name: "Bass", id: "acoustic-kit/bass"},
           {name: "8-Bit Bass", id: "8-bit/8-bit-bass"},
-          {name: "Dubstep Bass", id: "dubstep/bass"}
+          {name: "Dubstep Bass", id: "dubstep/bass"},
+          {name: "808", id: "hiphop/808"}
         ]}
           color={"--color-red"}
         />
