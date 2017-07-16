@@ -32,7 +32,10 @@
             "8-bit/8-bit-bass",
             "8-bit/8-bit-lead",
             "dubstep/bass",
-            "dubstep/lead"
+            "dubstep/lead",
+            "hiphop/808",
+            "hiphop/koto",            
+            "other/ukulele"
         ],
         [
             "acoustic-kit/bass",
@@ -40,16 +43,16 @@
             "8-bit/8-bit-bass",
             "8-bit/8-bit-lead",
             "dubstep/bass",
-            "dubstep/lead"
+            "dubstep/lead",
+            "hiphop/koto"
         ]
     ],
     "chordstruments": [
         [
-            "acoustic-kit/piano",
-            "acoustic-kit/saxophone",
-            "8-bit/8-bit-bass",
-            "8-bit/8-bit-lead",
-            "dubstep/synthchord"
+            "acoustic-kit/pianochord",
+            "8-bit/arpchord",
+            "dubstep/synthchord",
+            "hiphop/cello"
         ]
     ],
     "samples": [
@@ -61,6 +64,9 @@
         "8-bit/8-bit-hh",
         "dubstep/dub-kick",
         "dubstep/dub-snare",
-        "dubstep/dub-hh"
+        "dubstep/dub-hh",
+        "hiphop/hiphop-kick",
+        "hiphop/hiphop-snare",
+        "hiphop/hiphop-hh"
     ]
 }

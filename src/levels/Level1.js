@@ -20,7 +20,7 @@ class Level1 extends React.Component {
   }
 
   onChangeKey(enabled, note, time, loop){
-    Audio.setLoop(enabled, "acoustic-kick", 0, time, loop, this.sharedKeyData);
+    Audio.setLoop(enabled, "hiphop-kick", 0, time, loop, this.sharedKeyData);
     Score.progress('draw', enabled ? 30 : 20);
     
     let notes = this.refs.keys.props.notes;

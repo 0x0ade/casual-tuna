@@ -1,3 +1,5 @@
+require('styles/Level5.scss');
+
 import React from 'react';
 import Modul from '../components/Modul';
 import Timeline from '../components/Timeline';
@@ -12,10 +14,12 @@ class Level5 extends React.Component {
       <div className="modules">
         <Modul
           name="Drums" instruments={[
-          {name: "Acoustic Drums", id: "acoustic-kit/acoustic:drums"},
-          {name: "8-Bit Drums", id: "8-bit/8-bit:drums"},
-          {name: "Dubstep Drums", id: "dubstep/dub:drums"}
-        ]}
+            {name: "Hiphop Drums", id: "hiphop/hiphop:drums"},
+            {name: "Acoustic Drums", id: "acoustic-kit/acoustic:drums"},
+            {name: "8-Bit Drums", id: "8-bit/8-bit:drums"},
+            {name: "Dubstep Drums", id: "dubstep/dub:drums"}
+          ]}
+          pitches={3}
           color={"--color-green"}
         />
         <Modul

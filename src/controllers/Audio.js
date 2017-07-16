@@ -123,25 +123,11 @@ export default class Audio {
                 break;
 
                 case 2:
-                name = name + "-kick";
-                data.volume *= 0.7;
-                data.speed *= 4.0;
+                name = name + "-snare";
                 break;
 
                 case 3:
-                name = name + "-snare";
-                break;
-
-                case 4:
-                name = name + "-snare";
-                data.volume *= 0.7;
-                data.speed *= 4.0;
-                break;
-
-                case 5:
-                name = name + "-snare";
-                data.volume *= 0.5;
-                data.speed *= 6.0;
+                name = name + "-hh";
                 break;
             }
             note = 0;
