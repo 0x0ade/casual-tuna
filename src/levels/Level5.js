@@ -36,7 +36,6 @@ class Level5 extends React.Component {
           {name: "8-Bit Lead", id: "8-bit/8-bit-lead"},
           {name: "Dubstep Lead", id: "dubstep/lead"},
           {name: "808", id: "hiphop/808"},
-          {name: "Cello", id: "hiphop/cello"},
           {name: "Koto", id: "hiphop/koto"},
           {name: "Ukulele", id: "other/ukulele"},
           ]}
