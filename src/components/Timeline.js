@@ -62,6 +62,12 @@ class Timeline extends React.Component {
     Audio.setTimeline(i);
   }
 
+  onChangePlay(e) {
+    if (e)
+      Audio.bOffset -= Audio.b;
+    Audio.timelinePaused = !e;
+  }
+
   render() {
     let measures = [];
     for (var i = 0; i < this.state.measures.length; i++){
@@ -76,7 +82,11 @@ class Timeline extends React.Component {
           {measures}
         </div>
         <div className="controls">
-          <ToggleButton onChange={e => {}} style={{"--color-light": "rgba(0, 0, 0, 0.5)", "width": "32px"}}>PLAY</ToggleButton>
+          <ToggleButton
+            className="mini" onChange={this.onChangePlay.bind(this)}
+            style={{"--color-light": "rgba(255, 255, 255, 0.5)", "width": "32px"}}
+            onChange={this.onChangePlay.bind(this) }
+            ><img alt="play / pause" src={require("../images/play.png")}/></ToggleButton>
         </div>
       </div>
     );

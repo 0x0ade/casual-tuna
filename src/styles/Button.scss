@@ -10,6 +10,10 @@
   cursor: pointer;
   box-shadow: none;
 
+  &:focus {
+    outline: none;
+  }
+
   &:active {
     box-shadow: 0 0 16px var(--color-light);    
   }
@@ -24,8 +28,24 @@
     }
   }
 
-  &:focus {
-    outline: none;
+  &.mini {
+    background-color: transparent;
+    padding: 0;
+    width: 32px;
+    height: 24px;
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+
+    &.enabled {
+      background-color: var(--color-light);
+      box-shadow: none;
+      &:hover {
+        box-shadow: 0 0 8px var(--color-light);
+      }
+    }
   }
 
 }

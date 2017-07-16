@@ -1,17 +1,30 @@
 .levelbar {
-  border-top: rgba(255, 255, 255, 0.75) solid 1px;
+  border-top: rgba(255, 255, 255, 0.5) solid 1px;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   height: 72px;
-  margin: 0 25px;
-  padding: 8px 8px 33px 8px;
+  padding: 8px 33px 33px 33px;
   box-sizing: border-box;
   background-image: url("../images/background.png");
   background-attachment: fixed;
   background-size: cover;
   background-repeat: no-repeat;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -1px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    border-top: rgba(255, 255, 255, 0.5) solid 1px;
+    margin: 0 25px;
+  }
 
   .scorebar-wrap, .scorebar {
     position: relative;
