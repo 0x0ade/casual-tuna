@@ -63,10 +63,11 @@ class Modul extends React.Component {
 
   onClear() {
     let name = `module:${this.props.name}`;
-    Audio.loops.forEach(info => {
+    for (let i = Audio.loops.length - 1; i > -1; --i) {
+      let info = Audio.loops[i];
       if (info.name == name)
         Audio.stopLoop(info);
-    });
+    }
     for (let i = 0; i < this.state.values.length; i++) {
         let values = this.state.values[i];
         for (let ii = 0; ii < values.length; ii++) {
