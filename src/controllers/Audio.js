@@ -119,14 +119,21 @@ export default class Audio {
         return Audio.modules[module].volume;
     }
 
-    static setTimeline(i) {
+    static setTimeline(i, delayedRefresh) {
         i %= Audio.timeline.length;
         Audio.log(`Setting timeline to #${i}`); 
         Audio.timeline[Audio.currentTimeline] = Audio.loops;
         Audio.loops = Audio.timeline[i];
         Audio.currentTimeline = i;
-        Audio.forceRefresh();
-        Audio.onSetTimeline.forEach(f => f(i, Audio.loops));
+
+        let refresh = () => {
+            Audio.forceRefresh();
+            Audio.onSetTimeline.forEach(f => f(i, Audio.loops));
+        };
+        if (!delayedRefresh)
+            refresh();
+        else
+            setTimeout(refresh, 0);
     }
 
     static play(name, note, data) {
@@ -473,14 +480,14 @@ export default class Audio {
         
         // Any audio management (f.e. custom loops) should end up here.
 
-        if (!Audio.timelinePaused) {
+        for (let i = 0; i < Audio.timeline.length && !Audio.timelinePaused; i++) {
             let maxLength = 0;
             Audio.loops.forEach(info => {
                 if (maxLength < info.loopLength)
                     maxLength = info.loopLength
             });
             if (b >= maxLength) {
-                Audio.setTimeline(Audio.currentTimeline + 1);
+                Audio.setTimeline(Audio.currentTimeline + 1, true);
                 Audio.bOffset -= b;
                 Audio.lastb = -1;
                 b = Audio.__b;
