@@ -1,5 +1,5 @@
 import React from 'react';
-import Modul from '../components/Modul';
+import Modules from '../components/Modules';
 import Timeline from '../components/Timeline';
 
 class Level4 extends React.Component {
@@ -10,25 +10,8 @@ class Level4 extends React.Component {
         <Timeline/>
       </header>
       <div className="modules">
-        <Modul
-          name="Drums" instruments={[
-            {name: "Hiphop Drums", id: "hiphop/hiphop:drums"},
-            {name: "Acoustic Drums", id: "acoustic-kit/acoustic:drums"},
-            {name: "8-Bit Drums", id: "8-bit/8-bit:drums"},
-            {name: "Dubstep Drums", id: "dubstep/dub:drums"}
-          ]}
-          pitches={3}
-          color={"--color-green"}
-        />
-        <Modul
-          name="Bass" instruments={[
-          {name: "Bass", id: "acoustic-kit/bass"},
-          {name: "8-Bit Bass", id: "8-bit/8-bit-bass"},
-          {name: "Dubstep Bass", id: "dubstep/bass"},
-          {name: "808", id: "hiphop/808"}
-        ]}
-          color={"--color-red"}
-        />
+        <Modules.Drums/>
+        <Modules.Bass/>
       </div>
     </div>);
   }

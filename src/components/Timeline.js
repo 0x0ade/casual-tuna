@@ -10,52 +10,65 @@ class Timeline extends React.Component {
   constructor(props) {
     super(props);
 
+    let measures = [];
+    Audio.timeline.forEach(loops => measures.push(this.parseMeasure(loops)));
+    measures[Audio.currentTimeline] = this.parseMeasure(Audio.loops);
+
     this.state = {
-      measures: [
-        [false, false, false],
-        [false, false, false],
-        [false, false, false],
-        [false, false, false],
-        [false, false, false],
-        [false, false, false],
-        [false, false, false],
-        [false, false, false],
-        [false, false, false],
-        [false, false, false]
-      ],
+      measures: measures,
       selected: 0
     }
 
-    Audio.onSetTimeline.push(i => this.setState({
-      selected: i
-    }));
+    this.onSetTimeline = this.onSetTimeline.bind(this);
+    Audio.onSetTimeline.push(this.onSetTimeline);
 
     this.onUpdateLoop = this.onUpdateLoop.bind(this);
     Audio.onUpdateLoop.push(this.onUpdateLoop);
   }
 
   componentWillUnmount() {
+    Audio.onSetTimeline.splice(Audio.onSetTimeline.indexOf(this.onSetTimeline), 1);
     Audio.onUpdateLoop.splice(Audio.onUpdateLoop.indexOf(this.onUpdateLoop), 1);
   }
 
-  onUpdateLoop = (loops) => {
-    var values = [false, false, false];
-    loops.forEach(info => {
-      switch (info.name.substr('module:'.length)) {
-        case 'Drums':
-        values[0] = true;
-        break;
+  parseInfo(info, measure) {
+    if (!info.name.startsWith('module:'))
+      return -1;
+    
+    switch (info.name.substr('module:'.length)) {
+      case 'Drums':
+      if (measure != null)
+        measure[0] = true;
+      return 0;
 
-        case 'Bass':
-        values[1] = true;
-        break;
+      case 'Bass':
+      if (measure != null)
+        measure[1] = true;
+      return 1;
 
-        case 'Keyboard':
-        values[2] = true;
-        break;
-      }
+      case 'Keyboard':
+      if (measure != null)
+        measure[2] = true;
+      return 2;
+    }
+
+    return -1;
+  }
+
+  parseMeasure(loops) {
+    var measure = [false, false, false];
+    loops.forEach(info => this.parseInfo(info, measure));
+    return measure;
+  }
+
+  onSetTimeline = i => {
+    this.setState({
+      selected: i
     });
-    this.state.measures[Audio.currentTimeline] = values;
+  }
+
+  onUpdateLoop = loops => {
+    this.state.measures[Audio.currentTimeline] = this.parseMeasure(loops);
     this.forceUpdate();
   }
 
@@ -146,7 +159,7 @@ class Measure extends React.Component{
 }
 
 Measure.defaultProps = {
-  active: [true, false, false],
+  active: [false, false, false],
   onSelect: (i) => {},
   index: 0
 };

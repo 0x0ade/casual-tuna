@@ -1,7 +1,7 @@
 require('styles/Level5.scss');
 
 import React from 'react';
-import Modul from '../components/Modul';
+import Modules from '../components/Modules';
 import Timeline from '../components/Timeline';
 
 class Level5 extends React.Component {
@@ -12,37 +12,9 @@ class Level5 extends React.Component {
         <Timeline/>
       </header>
       <div className="modules">
-        <Modul
-          name="Drums" instruments={[
-            {name: "Hiphop Drums", id: "hiphop/hiphop:drums"},
-            {name: "Acoustic Drums", id: "acoustic-kit/acoustic:drums"},
-            {name: "8-Bit Drums", id: "8-bit/8-bit:drums"},
-            {name: "Dubstep Drums", id: "dubstep/dub:drums"}
-          ]}
-          pitches={3}
-          notes={12}
-          color={"--color-green"}
-        />
-        <Modul
-          name="Bass" instruments={[
-          {name: "Bass", id: "acoustic-kit/bass"},
-          {name: "8-Bit Bass", id: "8-bit/8-bit-bass"},
-          {name: "Dubstep Bass", id: "dubstep/bass"},
-          {name: "808", id: "hiphop/808"}
-        ]}
-          notes={12}
-          color={"--color-red"}
-        />
-        <Modul name="Keyboard" instruments={[
-          // {name: "Piano", id: "acoustic-kit/piano"},
-          {name: "Saxophone", id: "acoustic-kit/saxophone"},
-          {name: "8-Bit Lead", id: "8-bit/8-bit-lead"},
-          {name: "Dubstep Lead", id: "dubstep/lead"},
-          {name: "Koto", id: "hiphop/koto"},
-          {name: "Ukulele", id: "other/ukulele"},
-          ]}
-          notes={12}
-        />
+        <Modules.Drums notes={8}/>
+        <Modules.Bass notes={8}/>
+        <Modules.Lead notes={8}/>
       </div>
     </div>);
   }

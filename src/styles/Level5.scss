@@ -4,4 +4,11 @@
   margin-bottom: 256px;
   width: 65%;
   margin: 0 auto;
+
+  .column:nth-child(2n+0) {
+    opacity: 0.7;
+    .key {
+      --color-faded: rgba(200, 200, 200, 0.5);
+    }
+  }
 }
