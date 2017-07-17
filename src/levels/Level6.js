@@ -1,13 +1,11 @@
-require('styles/Level5.scss');
-
 import React from 'react';
 import Modules from '../components/Modules';
 import Timeline from '../components/Timeline';
 
-class Level5 extends React.Component {
+class Level6 extends React.Component {
 
   render() {
-    return (<div className="level level5">
+    return (<div className="level level6">
       <header className="header">
         <Timeline/>
       </header>
@@ -15,13 +13,14 @@ class Level5 extends React.Component {
         <Modules.Drums notes={8}/>
         <Modules.Bass notes={8}/>
         <Modules.Lead notes={8}/>
+        <Modules.Chords notes={8}/>
       </div>
     </div>);
   }
 }
 
-Level5.defaultProps = {
+Level6.defaultProps = {
 
 };
 
-export default Level5;
+export default Level6;

@@ -179,14 +179,18 @@ export default class Audio {
             }
             note = 0;
             data.target = data.target || Audio.masterConvolverBypass;
-        }
+        } else if (name.endsWith(':chords'))
+            name = `${name.substr(0, name.length - ':chords'.length)}${Audio.samplemap.chords[Math.floor((note - 1) / 5)][(note - 1) % 5]}`;
+        else if (note != null && note != 0)
+            name = `${name}${Audio.samplemap.notes[Math.floor((note - 1) / 5)][(note - 1) % 5]}`;
 
         data.target = data.target || Audio.master;
 
-        if (note != null && note != 0)
-            name = `${name}${Audio.samplemap.notes[Math.floor((note - 1) / 5)][(note - 1) % 5]}`;
-
         let buffer = Audio.samples[name];
+        if (buffer == null) {
+            Audio.log(`[WARNING] Sound not found: ${name}`);
+            return;
+        }
 
         let info;
         let reused;
@@ -393,6 +397,15 @@ export default class Audio {
                 map.instruments.forEach((oct, octi) => {
                     oct.forEach(instr => {
                         map.notes[octi].forEach((note, notei) => {
+                            let full = `${instr}${note}`;
+                            let short = full.split('/');
+                            Audio.fetchSample(`assets/samples/${full}.ogg`, full, short[short.length - 1]);
+                        });
+                    });
+                });
+                map.chordstruments.forEach((oct, octi) => {
+                    oct.forEach(instr => {
+                        map.chords[octi].forEach((note, notei) => {
                             let full = `${instr}${note}`;
                             let short = full.split('/');
                             Audio.fetchSample(`assets/samples/${full}.ogg`, full, short[short.length - 1]);
