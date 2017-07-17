@@ -23,7 +23,8 @@ class Modul extends React.Component {
 
     this.state = {
       values: columns,
-      solo: false
+      solo: Audio.solo == `module:${props.name}`,
+      volume: Audio.getVolume(props.name)
     };
 
     if (window.CTModules[this.props.name] == null) {
@@ -57,6 +58,9 @@ class Modul extends React.Component {
 
   onChangeVolume(value) {
     Audio.setVolume(this.props.name, value);
+    this.setState({
+      volume: value
+    });
   }
 
   onChangeSolo(value) {
@@ -64,6 +68,7 @@ class Modul extends React.Component {
       Audio.solo = `module:${this.props.name}`;
     else
       Audio.solo = null;
+    // Setting Audio.solo affects all modules; the controller updates all states.
   }
 
   onClear() {
@@ -99,6 +104,7 @@ class Modul extends React.Component {
           onChangeVolume={this.onChangeVolume.bind(this)}
           onChangeSolo={this.onChangeSolo.bind(this)}
           solo={this.state.solo}
+          volume={this.state.volume}
           onClear={this.onClear.bind(this)}
         />
       </div>

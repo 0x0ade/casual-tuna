@@ -9,15 +9,13 @@ import 'rc-slider/assets/index.css';
 class Controls extends React.Component {
   constructor(props) {
     super(props);
-
-    props.onChangeVolume(0.5); // Default value.
   }
 
   render() {
     let icon = require('../images/sound.png');
     return (
       <div className="controls">
-        <IconSlider icon={icon} onChange={e => this.props.onChangeVolume(e / 100)}/>
+        <IconSlider icon={icon} defaultValue={this.props.volume * 100} onChange={e => this.props.onChangeVolume(e / 100)}/>
         <ToggleButton onChange={e => this.props.onChangeSolo(e)} enabled={this.props.solo} externalState={true}>SOLO</ToggleButton>
         <Button onClick={e => this.props.onClear(e)}>CLEAR</Button>
       </div>
@@ -29,7 +27,8 @@ Controls.defaultProps = {
   onChangeVolume: value => {},
   onChangeSolo: value => {},
   onClear: () => {},
-  solo: false
+  solo: false,
+  volume: 0.5
 };
 
 export default Controls;

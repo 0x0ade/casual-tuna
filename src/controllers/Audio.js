@@ -99,7 +99,7 @@ export default class Audio {
     static initModule(module) {
         return Audio.modules[module] = Audio.modules[module] || {
             instrument: null,
-            volume: 1,
+            volume: 0.5,
             target: null
         };
     }
@@ -112,6 +112,11 @@ export default class Audio {
     static setVolume(module, value) {
         Audio.initModule(module);
         Audio.modules[module].volume = value;
+    }
+
+    static getVolume(module, value) {
+        Audio.initModule(module);
+        return Audio.modules[module].volume;
     }
 
     static setTimeline(i) {
