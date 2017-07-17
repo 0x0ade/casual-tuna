@@ -11,7 +11,7 @@ class IconSlider extends React.Component {
   render() {
     return (
       <div className="icon-slider">
-        <Slider min={0} max={100} defaultValue={50} onChange={this.changeEvent.bind(this)} />
+        <Slider min={this.props.min} max={this.props.max} defaultValue={this.props.defaultValue} onChange={this.changeEvent.bind(this)} />
         <img className="icon" src={this.props.icon} />
       </div>
     );
@@ -19,7 +19,10 @@ class IconSlider extends React.Component {
 }
 
 IconSlider.defaultProps = {
-  icon: require("../images/sound.png")
+  icon: require("../images/sound.png"),
+  min: 0,
+  max: 100,
+  defaultValue: 50
 };
 
 export default IconSlider;

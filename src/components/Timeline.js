@@ -16,7 +16,10 @@ class Timeline extends React.Component {
 
     this.state = {
       measures: measures,
-      selected: 0
+      selected: Audio.currentTimeline,
+      playing: !Audio.timelinePaused,
+      muted: Audio.masterGain.gain.value == 0,
+      speed: (Audio.bpm - 100) / 4
     }
 
     this.onSetTimeline = this.onSetTimeline.bind(this);
@@ -47,6 +50,7 @@ class Timeline extends React.Component {
       return 1;
 
       case 'Keyboard':
+      case 'Lead':
       if (measure != null)
         measure[2] = true;
       return 2;
@@ -80,14 +84,17 @@ class Timeline extends React.Component {
     if (e)
       Audio.bOffset -= Audio.b;
     Audio.timelinePaused = !e;
+    this.state.playing = !e; // Don't rerender.
   }
 
   onChangeMute(e) {
     Audio.masterGain.gain.value = e ? 0 : 1;
+    this.state.muted = e; // Don't rerender.
   }
 
   onChangeSpeed(v) {
     Audio.bpm = 100 + 4 * v;
+    this.state.speed = v; // Don't rerender.
   }
 
   render() {
@@ -109,14 +116,17 @@ class Timeline extends React.Component {
             className="mini"
             style={buttonStyle}
             onChange={this.onChangePlay.bind(this)}
+            enabled={this.state.playing}
             ><img alt="play / pause timeline" src={require("../images/play.png")}/></ToggleButton>
           <ToggleButton
             className="mini"
             style={buttonStyle}
             onChange={this.onChangeMute.bind(this)}
+            enabled={this.state.muted}
             ><img alt="mute" src={require("../images/mute.png")}/></ToggleButton>
           <IconSlider
             icon={require("../images/tempo.png")}
+            defaultValue={this.state.speed}
             onChange={this.onChangeSpeed.bind(this)}
           />
         </div>
