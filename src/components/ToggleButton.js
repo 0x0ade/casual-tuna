@@ -14,6 +14,10 @@ class ToggleButton extends React.Component {
   }
 
   toggle() {
+    if (this.props.externalState) {
+      this.props.onChange(!this.props.enabled);
+      return;
+    }
     let enabled = !this.state.enabled;
     this.setState({
       enabled: enabled
