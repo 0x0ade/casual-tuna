@@ -40,27 +40,32 @@ class Timeline extends React.Component {
     
     switch (info.name.substr('module:'.length)) {
       case 'Drums':
-      if (measure != null)
+      if (measure != null && measure.length > 0)
         measure[0] = true;
       return 0;
 
       case 'Bass':
-      if (measure != null)
+      if (measure != null && measure.length > 1)
         measure[1] = true;
       return 1;
 
       case 'Keyboard':
       case 'Lead':
-      if (measure != null)
+      if (measure != null && measure.length > 2)
         measure[2] = true;
       return 2;
+
+      case 'Chords':
+      if (measure != null && measure.length > 3)
+        measure[3] = true;
+      return 3;
     }
 
     return -1;
   }
 
   parseMeasure(loops) {
-    var measure = [false, false, false];
+    var measure = Array(this.props.rows).fill().map((e, i) => false);
     loops.forEach(info => this.parseInfo(info, measure));
     return measure;
   }
@@ -136,7 +141,7 @@ class Timeline extends React.Component {
 }
 
 Timeline.defaultProps = {
-  
+  rows: 4
 };
 
 export default Timeline;
@@ -144,24 +149,15 @@ export default Timeline;
 class Measure extends React.Component{
   render(){
     let lines = [];
-    if(this.props.active[0]){
-      lines.push(<div key="a" className="line" style={{"--color": "var(--color-green-light)"}}></div>);
-    }else{
-      lines.push(<div key="b" className="line" style={{"--color": "var(--color-faded)"}}></div>);
-    }
-    if(this.props.active[1]){
-      lines.push(<div key="c" className="line" style={{"--color": "var(--color-red-light)"}}></div>);
-    }else{
-      lines.push(<div key="d" className="line" style={{"--color": "var(--color-faded)"}}></div>);
-    }
-    if(this.props.active[2]){
-      lines.push(<div key="e" className="line" style={{"--color": "var(--color-blue-light)"}}></div>);
-    }else{
-      lines.push(<div key="f" className="line" style={{"--color": "var(--color-faded)"}}></div>);
-    }
+    let colors = ["green", "red", "blue", "yellow"];
+    for (let i = 0; i < this.props.active.length; i++)
+      if (this.props.active[i])
+        lines.push(<div key={i} className="line" style={{"--color": `var(--color-${colors[i]}-light)`}}></div>);
+      else
+        lines.push(<div key={i} className="line" style={{"--color": "var(--color-faded)"}}></div>);
 
     return (
-      <div className={this.props.className + " measure"} onClick={() => this.props.onSelect(this.props.index)}>
+      <div className={((this.props.className || "") + " measure").trim()} onClick={() => this.props.onSelect(this.props.index)}>
         {lines}
       </div>
     );
@@ -169,7 +165,7 @@ class Measure extends React.Component{
 }
 
 Measure.defaultProps = {
-  active: [false, false, false],
+  active: [false, false, false, false],
   onSelect: (i) => {},
   index: 0
 };

@@ -9,7 +9,7 @@ class Level5 extends React.Component {
   render() {
     return (<div className="level level5">
       <header className="header">
-        <Timeline/>
+        <Timeline rows={3}/>
       </header>
       <div className="modules large">
         <Modules.Drums notes={8}/>

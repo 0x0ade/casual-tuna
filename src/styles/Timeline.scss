@@ -7,19 +7,17 @@
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.8) inset, 0 -3px 8px rgba(0, 0, 0, 0.3) inset;
 
   .measures {
-    height: 100px;
     display: flex;
     flex-direction: row;
 
     .measure {
       flex-grow: 1;
-      height: 100%;
       cursor: pointer;
   
       .line {
         transition: box-shadow 0.2s;
         width: calc(100% - 4px);
-        height: calc(33% - 8px);
+        height: 25px;
         margin: 4px 2px;
         background-color: var(--color);
         box-shadow: none;
