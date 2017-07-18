@@ -19,7 +19,7 @@ class Timeline extends React.Component {
       selected: Audio.currentTimeline,
       playing: !Audio.timelinePaused,
       muted: Audio.masterGain.gain.value == 0,
-      speed: (Audio.bpm - 100) / 4
+      speed: Audio.bpm
     }
 
     this.onSetTimeline = this.onSetTimeline.bind(this);
@@ -98,7 +98,7 @@ class Timeline extends React.Component {
   }
 
   onChangeSpeed(v) {
-    Audio.bpm = 100 + 4 * v;
+    Audio.bpm = v;
     this.state.speed = v; // Don't rerender.
   }
 
@@ -132,6 +132,8 @@ class Timeline extends React.Component {
           <IconSlider
             icon={require("../images/tempo.png")}
             defaultValue={this.state.speed}
+            min={100}
+            max={300}
             onChange={this.onChangeSpeed.bind(this)}
           />
         </div>

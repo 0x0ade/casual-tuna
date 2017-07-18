@@ -34,7 +34,7 @@
             "dubstep/bass",
             "dubstep/lead",
             "hiphop/808",
-            "hiphop/koto",            
+            "hiphop/koto",
             "other/ukulele"
         ],
         [
@@ -68,5 +68,16 @@
         "hiphop/hiphop-kick",
         "hiphop/hiphop-snare",
         "hiphop/hiphop-hh"
+    ],
+    "cutoff": [
+        "acoustic-kit/bass",
+        "acoustic-kit/saxophone",
+        "8-bit/8-bit-bass",
+        "8-bit/8-bit-lead",
+        "dubstep/bass",
+        "dubstep/lead",
+        "hiphop/808",
+        "8-bit/arpchord",
+        "dubstep/synthchord"
     ]
 }

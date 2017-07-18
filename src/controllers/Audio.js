@@ -192,11 +192,18 @@ export default class Audio {
             return;
         }
 
+        let cutoff = -1;
+        for (let i = 0; i < Audio.samplemap.cutoff.length; i++)
+            if (name.startsWith(Audio.samplemap.cutoff[i])) {
+                cutoff = i;
+                break;
+            }
+
         let info;
         let reused;
         for (let i = 0; i < Audio.sources.length; i++) {
             info = Audio.sources[i];
-            if (info.free && info.target == data.target) {
+            if ((info.free || (cutoff > -1 && info.cutoff == cutoff)) && info.target == data.target) {
                 info.free = false;
                 reused = true;
                 // Audio.log(`Reusing source #${i}`);
@@ -211,6 +218,7 @@ export default class Audio {
             reused = false;
             info = {
                 free: false,
+                cutoff: cutoff,
                 target: data.target,
                 source: null,
                 gain: Audio.context.createGain()
