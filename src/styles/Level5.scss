@@ -1,8 +1,7 @@
 .modules.large {
   display: flex;
-  flex-direction: column;
-  width: 65%;
-  margin: 0 auto 128px auto;
+  flex-direction: row;
+  flex-wrap: wrap;
 
   .column:nth-child(2n+0) {
     opacity: 0.7;

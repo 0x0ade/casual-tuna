@@ -1,6 +1,7 @@
 .key {
   background-color: var(--color-faded);
-  width: 80px;
+  flex-shrink: 1;
+  flex-grow: 1;
   height: 20px;
   margin: 2px;
   cursor: pointer;
@@ -19,11 +20,13 @@
   display: flex;
   flex-direction: row;
   margin: 0 auto;
-  overflow: overflow-x;
+  overflow-x: hidden;
+  width: 100%;
 }
 .column {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
 }
 
 .column.highlighted .key {
